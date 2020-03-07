@@ -1,4 +1,3 @@
-
 %Paramaters 
 
 rho = 1.225; 
