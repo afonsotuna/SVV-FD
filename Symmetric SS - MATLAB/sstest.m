@@ -37,7 +37,7 @@ C_z_alpha   = -5.7434;
 C_z_alphad  = -0.0035;
 C_z_q       = -5.6629;
 C_z_delta_e = -0.6961;
-C_z_0       = -W*2/(rho*V^2*S);
+C_z_0       = -W*2*cos(theta_0)/(rho*V^2*S);
 
 %pitch moment deriv. 
 C_m_0       =  0.0297;
@@ -88,16 +88,34 @@ R = [-C_x_delta_e
       0
      -C_m_delta_e];
  
- D = inv(P)*Q;
+ A = inv(P)*Q;
 
- E = inv(P)*R;
+ B = inv(P)*R;
  
-A = [x_u x_alpha x_theta 0
+F = [x_u x_alpha x_theta 0
      z_u z_alpha z_theta z_q
      0   0       0       V/c
      m_u m_alpha m_theta m_q];
  
-B = [x_delta_e
+E = [x_delta_e
      z_delta_e
      m_delta_e];
  
+ C = [1 0 0 0
+      0 1 0 0 
+      0 0 1 0
+      0 0 0 1];
+  
+ D = [0
+      0
+      0
+      0];
+ 
+sys = ss(A,B,C,D);
+
+t = 0:0.01:3;
+y = impulse(sys,t);
+clf()
+plot(t, y(:,2))
+hold on
+%plot(t, y(:,1))
