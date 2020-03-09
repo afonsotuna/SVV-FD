@@ -81,7 +81,7 @@ P = c/V*[-2*u_c 0                   0 0
 Q = [-C_x_u  -C_x_alpha -C_z_0  0
      -C_z_u  -C_z_alpha  C_x_0  -(C_z_q+2*u_c)
       0        0         0      -1
-     -C_m_u   -C_m_alpha 0      -C_m_alpha];
+     -C_m_u   -C_m_alpha 0      -C_m_q];
 
 R = [-C_x_delta_e
      -C_z_delta_e
@@ -90,12 +90,14 @@ R = [-C_x_delta_e
  
  D = inv(P)*Q;
 
+ E = inv(P)*R;
+ 
 A = [x_u x_alpha x_theta 0
      z_u z_alpha z_theta z_q
      0   0       0       V/c
      m_u m_alpha m_theta m_q];
  
-%B = [x_delta_e
-     %z_delta_e
-     %m_delta_e];
+B = [x_delta_e
+     z_delta_e
+     m_delta_e];
  
