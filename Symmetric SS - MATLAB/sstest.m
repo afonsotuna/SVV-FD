@@ -1,6 +1,7 @@
 %Paramaters 
 
 rho = 1.225; 
+theta_0 = 0;
 m = 4157.174; %kg 
 W = m*9.81; 
 V = 300; 
@@ -28,7 +29,7 @@ C_x_alpha   = -0.4797;
 C_x_alphad  =  0.0833;
 C_x_q       = -0.2817;
 C_x_delta_e = -0.0373;
-C_x_0       = 2*W*sin(theta_0)/(rho*V^2*s);
+C_x_0       = 2*W*sin(theta_0)/(rho*V^2*S);
 
 %normal force deriv. 
 C_z_u       = -0.3762;
@@ -60,11 +61,11 @@ z_q       = V/c * (2*u_c+C_z_q)/(2*u_c-C_z_alphad);
 m_u       = V/c * (C_m_u + C_z_u*(C_m_alphad)/(2*u_c-C_z_alphad))/(2*u_c*(K_yy)^2); 
 m_alpha   = V/c * (C_m_alpha + C_z_alpha*(C_m_alphad)/(2*u_c-C_z_alphad))/(2*u_c*(K_yy)^2);
 m_theta   = V/c * (C_x_0*(C_m_alphad)/(2*u_c-C_z_alphad))/(2*u_c*(K_yy)^2);
-m_q       = V/c * (C_m_q + C_m_alphad*(2*u_c+Z_z_q)/(2*u_c-C_z_alphad))/(2*u_c*(K_yy)^2);
+m_q       = V/c * (C_m_q + C_m_alphad*(2*u_c+C_z_q)/(2*u_c-C_z_alphad))/(2*u_c*(K_yy)^2);
 
 
 x_delta_e = V/c * C_x_delta_e/(2*u_c);
-z_delta_e = V/c * C_z_detla_e/(2*u_c-C_z_alphad);
+z_delta_e = V/c * C_z_delta_e/(2*u_c-C_z_alphad);
 m_delta_e = V/c * (C_m_delta_e + C_z_delta_e*(C_m_alphad)/(2*u_c-C_z_alphad))/(2*u_c*(K_yy)^2);
 
 %State Space Matrices 
