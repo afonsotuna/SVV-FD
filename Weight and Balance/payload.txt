@@ -1,0 +1,13 @@
+seat1,131,50
+seat2,131,50
+seat3,214,50
+seat4,214,50
+seat5,251,50
+seat6,251,50
+seat7,288,50
+seat8,288,50
+seat9,170,0
+seat10,170,80
+nose,74,90
+aftcabin1,321,50
+aftcabin2,338,0
