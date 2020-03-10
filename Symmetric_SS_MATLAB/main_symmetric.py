@@ -29,13 +29,14 @@ tas_event = flight_data[index, 41] * 0.514444
 data_event = np.zeros((n_points, 2))
 for i in range(n_points):
     data_event[i, 0] = flight_data[index + i, 47] - flight_data[index, 47]
-    data_event[i, 1] = flight_data[index + i, 0]  - flight_data[index, 0] # Outputs: ?? - u / 0 - alpha / ?? - theta / ?? - q
+    data_event[i, 1] = flight_data[index + i, 0] - flight_data[
+        index, 0]  # Outputs: ?? - u / 0 - alpha / ?? - theta / ?? - q
 t1 = data_event[:, 0]
 y1 = data_event[:, 1]
 
 # Define initial conditions
 u_hat_0 = 0
-alpha_0 = 0 #flight_data[index, 0]
+alpha_0 = 0  # flight_data[index, 0]
 theta_0 = flight_data[index, 21]
 qc_v_0 = (flight_data[index, 26] * c) / flight_data[index, 41]
 initial_cond = np.array([[u_hat_0], [alpha_0], [theta_0], [qc_v_0]])
@@ -49,7 +50,7 @@ y2 = out[1, :]  # Outputs: 0 - u / 1 - alpha / 2 - theta / 3 - q
 # IN DEBUGGING - DON'T TOUCH (currently looking at phugoid for reference data)
 plt.plot(t1, y1, label='Reference data - AoA')
 plt.plot(t2, y2, label='System response - AoA')
-#plt.plot(t2, input_delta_e, label='Elevator input')
+# plt.plot(t2, input_delta_e, label='Elevator input')
 plt.legend()
 plt.xlabel('Reference data vs system response between ' + str(t_lookup) + ' [s] and ' + str(t_interval) + ' [s].')
 plt.ylabel('Degrees')

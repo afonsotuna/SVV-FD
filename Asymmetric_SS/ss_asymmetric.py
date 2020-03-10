@@ -3,7 +3,7 @@ import numpy as np
 import control
 
 
-def ss_asym(rho=1.225, theta_0=0, m=4157.174, V=80):
+def ss_asym(rho=1.225, theta_0=0, m=4157.174, v=80):
     # dimensions
     W = m * 9.81
     S = 30  # m^2
@@ -46,30 +46,30 @@ def ss_asym(rho=1.225, theta_0=0, m=4157.174, V=80):
     Cn_sr = -0.0939  # derivative to rudder deflection
 
     # other parameters only required in this matrix
-    C_L = (W * np.cos(theta_0)) / (0.5 * rho * V ** 2 * S)  # component of weight along the Zs axis
+    C_L = (W * np.cos(theta_0)) / (0.5 * rho * v ** 2 * S)  # component of weight along the Zs axis
 
     # BUILDING MATRIXES
 
     P = np.zeros((4, 4))
-    P[0, 0] = (CY_b_d - 2 * u_c) * b / V
+    P[0, 0] = (CY_b_d - 2 * u_c) * b / v
     P[0, 1] = 0
     P[0, 2] = 0
     P[0, 3] = 0
 
     P[1, 0] = 0
-    P[1, 1] = (-1 / 2) * (b / V)
+    P[1, 1] = (-1 / 2) * (b / v)
     P[1, 2] = 0
     P[1, 3] = 0
 
     P[2, 0] = 0
     P[2, 1] = 0
-    P[2, 2] = -4 * u_c * K_xx ** 2 * (b / V)
-    P[2, 3] = 4 * u_c * K_xz * (b / V)
+    P[2, 2] = -4 * u_c * K_xx ** 2 * (b / v)
+    P[2, 3] = 4 * u_c * K_xz * (b / v)
 
-    P[3, 0] = (Cn_b_d) * (b / V)
+    P[3, 0] = (Cn_b_d) * (b / v)
     P[3, 1] = 0
-    P[3, 2] = 4 * u_c * K_xz * (b / V)
-    P[3, 3] = -4 * u_c * K_zz ** 2 * (b / V)
+    P[3, 2] = 4 * u_c * K_xz * (b / v)
+    P[3, 3] = -4 * u_c * K_zz ** 2 * (b / v)
 
     Q = np.zeros((4, 4))
     Q[0, 0] = -CY_b
