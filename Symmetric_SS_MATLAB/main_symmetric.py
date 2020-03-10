@@ -5,8 +5,9 @@ import numpy as np
 from Symmetric_SS_MATLAB.ss_symmetric import ss_sym
 
 # Define event (from flight test sheet)
-t_lookup = 3237  # time (in seconds) at which event happens
+t_lookup = 3235  # time (in seconds) at which event happens
 t_limit = 120  # length of interval (in seconds, multiples of 0.1)
+t_interval = t_lookup+t_limit
 block_fuel = 4050  # block fuel (lbs)
 passenger_weight = 695  # sum of passenger weight (kgs)
 
@@ -40,7 +41,10 @@ t2, out, p2 = control.forced_response(sys, T=t1, U=input_delta_e)
 y2 = out[1, :]  # Outputs: 0 - u / 1 - alpha / 2 - theta / 3 - q
 
 # IN DEBUGGING - DON'T TOUCH (currently looking at phugoid for reference data)
-plt.plot(t1, y1)
-plt.plot(t2, y2)
-plt.plot(t2, input_delta_e)
+plt.plot(t1, y1, label='Reference data - AoA')
+plt.plot(t2, y2, label='System response - AoA')
+plt.plot(t2, input_delta_e, label='Elevator input')
+plt.legend()
+plt.xlabel('Reference data vs system response between '+str(t_lookup)+' [s] and '+str(t_interval)+' [s].')
+plt.ylabel('Degrees')
 plt.show()
