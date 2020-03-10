@@ -40,12 +40,9 @@ with open('Weight and Balance/fuel.txt') as f:
 fuel_moment = lambda m: np.interp(m, x, y)
 
 # INITIAL FUEL SPECIFICATION
-masses['fuel'] = 4050.0
-moments['fuel'] = fuel_moment(4050.0)
-
-# RAMP MASS AND CG LOCATION
-RM = sum(masses.values())
-RCG = sum(moments.values()) * 100 / sum(masses.values())
+fuel_init = 4050.0
+masses['fuel'] = fuel_init
+moments['fuel'] = fuel_moment(fuel_init)
 
 # IMPORTING FUEL USED DATA
 mat = io.loadmat('Weight and Balance/reference_clean.mat')
@@ -58,12 +55,30 @@ fuel_used = lambda t: np.interp(t, time, left_FU) + np.interp(t, time, right_FU)
 
 # DEFINE MASS [lbs] AS A FUNCTION OF TIME [s]
 def mass(t):
-    pass
+    masses['fuel'] = fuel_init
+    moments['fuel'] = fuel_moment(fuel_init)
+    if t >= 9:
+        fuel = fuel_init - fuel_used(t)
+        assert fuel >= 0, 'Block fuel depleted at given time.'
+        masses['fuel'] = fuel
+        moments['fuel'] = fuel_moment(fuel)
+        return sum(masses.values())
+    else:
+        return sum(masses.values())
 
+# DEFINE CENTRE OF GRAVITY LOCATION [in] AS A FUNCTION OF TIME [s]
+# DATUM: NOSE
 def cg(t):
-    pass
-
-
+    masses['fuel'] = fuel_init
+    moments['fuel'] = fuel_moment(fuel_init)
+    if t >= 9:
+        fuel = fuel_init - fuel_used(t)
+        assert fuel >= 0, 'Block fuel depleted at given time.'
+        masses['fuel'] = fuel
+        moments['fuel'] = fuel_moment(fuel)
+        return sum(moments.values()) * 100 / sum(masses.values())
+    else:
+        return sum(moments.values()) * 100 / sum(masses.values())
 
 
 
