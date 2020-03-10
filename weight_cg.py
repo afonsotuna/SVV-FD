@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-
+from scipy import io
 #======================================= WEIGHT AND CENTRE OF GRAVITY AS FUNCTIONS OF TIME =======================================
 
 # UNITS:
@@ -18,29 +18,13 @@ moments = {'BEM': 9165.0 * 291.65 / 100}
 # INITIAL PAYLOAD SPECIFICATION
 with open('Weight and Balance/payload.txt') as f:
     # INPUT: file with position, arm, mass [kg]
-    # OUTPUT: moments and masses dictionaries in lbs-in and lbs respectively
+    # OUTPUT: moments and masses dictionaries in lbs-in/100 and lbs respectively
     for line in f:
         line = line.strip()
         line = line.split(',')
         label = line[0]
         moments[label] = int(line[1]) * float(line[2]) / lbs_to_kg / 100
         masses[label] = float(line[2]) / lbs_to_kg
-
-# PRE-PROCESSING FOR FUEL FLOW [lbs/s] AS A FUNCTION OF TIME [s]
-time = list(np.arange(0, 9, 0.1))
-right_engine = list(np.zeros(90))
-left_engine = list(np.zeros(90))
-
-with open('Weight and Balance/fuelflow.csv') as f:
-    for line in f:
-        line = line.strip()
-        line = line.split(',')
-        time.append(float(line[0]))
-        right_engine.append(float(line[1]) / 3600)
-        left_engine.append(float(line[2]) / 3600)
-
-rff = lambda t: np.interp(t, time, right_engine)
-lff = lambda t: np.interp(t, time, right_engine)
 
 # INTERPOLATOR FOR FUEL MOMENT AS A FUNCTION OF FUEL WEIGHT
 x = []
@@ -56,30 +40,28 @@ with open('Weight and Balance/fuel.txt') as f:
 fuel_moment = lambda m: np.interp(m, x, y)
 
 # INITIAL FUEL SPECIFICATION
-masses['fuel'] = 750.0
-moments['fuel'] = fuel_moment(750.0)
+masses['fuel'] = 4050.0
+moments['fuel'] = fuel_moment(4050.0)
 
 # RAMP MASS AND CG LOCATION
 RM = sum(masses.values())
 RCG = sum(moments.values()) * 100 / sum(masses.values())
 
-# DEFINE INTEGRATOR FOR TOTAL FUEL CONSUMED
-def integrate(f, a, b):
-    x = np.arange(a, b + 0.1, 0.1)
-    y = f(x)
-    return np.trapz(y, x)
+# IMPORTING FUEL USED DATA
+mat = io.loadmat('Weight and Balance/reference_clean.mat')
+flight_data = mat['clean_data']
+left_FU = flight_data[:, 13]
+right_FU = flight_data[:, 14]
+time = flight_data[:, 47]
+
+fuel_used = lambda t: np.interp(t, time, left_FU) + np.interp(t, time, right_FU)
 
 # DEFINE MASS [lbs] AS A FUNCTION OF TIME [s]
 def mass(t):
-    masses['fuel'] = masses['fuel'] - integrate(rff, 0, t) - integrate(lff, 0 , t)
-    assert fuel >= 0, 'Aircraft fuel depleted at given time.'
-    return RM - integrate(rff, 0, t) - integrate(lff, 0 , t)
+    pass
 
 def cg(t):
-    masses['fuel'] = masses['fuel'] - integrate(rff, 0, t) - integrate(lff, 0 , t)
-    assert fuel >= 0, 'Aircraft fuel depleted at given time.'
-    moments['fuel'] = fuel_moment(fuel)
-    return sum(moments.values()) * 100 / sum(masses.values())
+    pass
 
 
 
