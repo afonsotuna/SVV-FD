@@ -5,13 +5,14 @@ import numpy as np
 from Symmetric_SS_MATLAB.ss_symmetric import ss_sym
 
 # Define event (from flight test sheet)
-t_lookup = 3235  # time (in seconds) at which event happens
+t_lookup = 3225  # time (in seconds) at which event happens
 t_limit = 120  # length of interval (in seconds, multiples of 0.1)
-t_interval = t_lookup+t_limit
+t_interval = t_lookup + t_limit
 block_fuel = 4050  # block fuel (lbs)
 passenger_weight = 695  # sum of passenger weight (kgs)
+c = 2.0569
 
-# Flight data imported and SS system computed
+# Flight data imported
 mat = scipy.io.loadmat('reference_clean.mat')
 flight_data = mat['clean_data']
 
@@ -23,28 +24,33 @@ n_points = int(t_limit / 0.1) + 1
 used_fuel = flight_data[index, 13] + flight_data[index, 14]
 mass_event = (block_fuel - used_fuel + 9165) * 0.453592 + passenger_weight
 tas_event = flight_data[index, 41] * 0.514444
-sys = ss_sym(m=mass_event, v=tas_event)
 
 # Obtain correspondent flight data
 data_event = np.zeros((n_points, 2))
 for i in range(n_points):
     data_event[i, 0] = flight_data[index + i, 47] - flight_data[index, 47]
-    data_event[i, 1] = flight_data[index + i, 0] - flight_data[
-        index, 0]  # Outputs: ?? - u / 0 - alpha / ?? - theta / ?? - q
+    data_event[i, 1] = flight_data[index + i, 0]  - flight_data[index, 0] # Outputs: ?? - u / 0 - alpha / ?? - theta / ?? - q
 t1 = data_event[:, 0]
 y1 = data_event[:, 1]
 
+# Define initial conditions
+u_hat_0 = 0
+alpha_0 = 0 #flight_data[index, 0]
+theta_0 = flight_data[index, 21]
+qc_v_0 = (flight_data[index, 26] * c) / flight_data[index, 41]
+initial_cond = np.array([[u_hat_0], [alpha_0], [theta_0], [qc_v_0]])
+
 # Obtain impulse response
 input_delta_e = flight_data[index:index + n_points, 16]
-# t2, y2 = control.impulse_response(sys, T=t1, output=2)
-t2, out, p2 = control.forced_response(sys, T=t1, U=input_delta_e)
+sys = ss_sym(m=mass_event, theta_0=theta_0, v=tas_event)
+t2, out, p2 = control.forced_response(sys, T=t1, X0=initial_cond, U=input_delta_e)
 y2 = out[1, :]  # Outputs: 0 - u / 1 - alpha / 2 - theta / 3 - q
 
 # IN DEBUGGING - DON'T TOUCH (currently looking at phugoid for reference data)
 plt.plot(t1, y1, label='Reference data - AoA')
 plt.plot(t2, y2, label='System response - AoA')
-plt.plot(t2, input_delta_e, label='Elevator input')
+#plt.plot(t2, input_delta_e, label='Elevator input')
 plt.legend()
-plt.xlabel('Reference data vs system response between '+str(t_lookup)+' [s] and '+str(t_interval)+' [s].')
+plt.xlabel('Reference data vs system response between ' + str(t_lookup) + ' [s] and ' + str(t_interval) + ' [s].')
 plt.ylabel('Degrees')
 plt.show()
