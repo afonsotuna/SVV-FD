@@ -13,7 +13,7 @@ def ss_sym(rho=1.225, theta_0=0, m=4157.174, v=80):
     u_c = m / (rho * S * c)
 
     # inertia
-    K_yy = (1.3925) ** 0.5
+    K_yy = 1.3925 ** 0.5
 
     # long. force deriv.
     C_x_u = -0.0279
