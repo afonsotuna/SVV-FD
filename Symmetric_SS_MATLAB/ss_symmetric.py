@@ -3,7 +3,7 @@ import numpy as np
 import control
 
 
-def ss_sym(rho=1.225, theta_0=0, m=4157.174, V=300):
+def ss_sym(rho=1.225, theta_0=0, m=4157.174, V=80):
     # dimensions
     W = m * 9.81
     S = 30  # m^2

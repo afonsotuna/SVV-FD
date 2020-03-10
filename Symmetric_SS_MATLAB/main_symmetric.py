@@ -7,7 +7,7 @@ from Symmetric_SS_MATLAB.ss_symmetric import ss_sym
 # Flight data imported and SS system computed
 mat = scipy.io.loadmat('flight1_clean.mat')
 flight_data = mat['clean_data']
-sys = ss_sym(m=6324, V=80)  # for blank arguments => rho=1.225, theta_0=0, m=4157.174, V=300
+sys = ss_sym(m=6324, V=80)  # for blank arguments => rho=1.225, theta_0=0, m=4157.174, V=80
 
 # Define event (from flight test sheet)
 t_lookup = 3020  # time (in seconds) at which event happens
