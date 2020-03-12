@@ -57,7 +57,7 @@ out = -out
 
 # t2, out = control.impulse_response(sys, T=t1)
 y2 = out[1, :]  # Outputs: 0 - beta / 1 - phi / 2 - pb/2V / 3 - rb/2V
-
+#hehehe
 # IN DEBUGGING - DON'T TOUCH (currently looking at dutch roll 1 for reference data)
 # plt.plot(t1, y1, label='Reference data - phi')
 # plt.plot(t2, y2, label='System response - phi')
