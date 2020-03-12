@@ -19,6 +19,7 @@ def ss_sym(rho=1.225, theta_0=0, m=4157.174, v=80):
     C_x_u = -0.0279
     C_x_alpha = -0.4797
     C_x_delta_e = -0.0373
+    C_x_q  = -0.2817
     C_x_0 = 2 * W * math.sin(theta_0) / (rho * v ** 2 * S)
 
     # normal force deriv.
@@ -38,9 +39,14 @@ def ss_sym(rho=1.225, theta_0=0, m=4157.174, v=80):
 
     # MATRICES
     P = c / v * np.array(
-        [[-2 * u_c, 0, 0, 0], [0, C_z_alphad - 2 * u_c, 0, 0], [0, 0, -1, 0], [0, C_m_alphad, 0, -2 * u_c * K_yy ** 2]])
+        [[-2 * u_c, 0, 0, 0],
+         [0, C_z_alphad - 2 * u_c, 0, 0],
+         [0, 0, -1, 0],
+         [0, C_m_alphad, 0, -2 * u_c * K_yy ** 2]])
 
-    Q = ([[-C_x_u, -C_x_alpha, -C_z_0, 0], [-C_z_u, -C_z_alpha, C_x_0, -(C_z_q + 2 * u_c)], [0, 0, 0, -1],
+    Q = ([[-C_x_u, -C_x_alpha, -C_z_0, C_x_q],
+          [-C_z_u, -C_z_alpha, C_x_0, -(C_z_q + 2 * u_c)],
+          [0, 0, 0, -1],
           [-C_m_u, -C_m_alpha, 0, -C_m_q]])
 
     R = ([[-C_x_delta_e], [-C_z_delta_e], [0], [-C_m_delta_e]])
