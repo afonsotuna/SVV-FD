@@ -2,7 +2,7 @@ import pandas as Pd
 import numpy as np
 import matplotlib.pyplot as plt
 import xlrd
-
+from scipy import stats
 # Some needed constants, copy-pasted from the provided cit_par.py file
 
 rho0   = 1.2250          # air density at sea level [kg/m^3]
@@ -13,6 +13,7 @@ g      = 9.81            # [m/sec^2] (gravity constant)
 p0 = 101325              # Pressure at sea level in ISA [Pa]
 gamm = 1.4               # Ratio of specific heats [-]
 S      = 30.00	         # wing area [m^2]
+W_s = 60500
 
 BEM = 9165               # Basic empty mass, taken from mass report for 2020 [lbs]
 
@@ -45,10 +46,22 @@ F_used = data['F. used'].iloc[1:].to_numpy(dtype=float)  # Same as what's done a
 pax_masses = np.array(Pd.read_excel(ref_data, header=None, usecols='H', skiprows=7, nrows=9))
 init_fuel = xlrd.open_workbook(ref_data).sheet_by_index(0).cell_value(17, 3)
 ramp_mass = (BEM + init_fuel)*0.453592 + np.sum(pax_masses)  # Calculating total ramp mass, converting some lbs terms to kg
-mass = ramp_mass - F_used * 0.453592                         # Mass at each data point, also converting
+mass = ramp_mass - F_used * 0.453592                         # Mass at each data point, also converting to kg
 
+V_e_red = V_e * np.sqrt(W_s/(mass * g))
 C_L = (mass * g) / (0.5 * S * rho0 * V_e ** 2 )
 aoa = data['a'].iloc[1:].to_numpy(dtype=float)
 
 plt.scatter(aoa, C_L)
+gradient, intercept, r_value, p_value, std_err = stats.linregress(aoa, C_L)
+mn = np.min(aoa)
+mx = np.max(aoa)
+x1 = np.linspace(mn,mx,500)
+y1 = gradient*x1+intercept
+plt.plot(aoa, C_L,'ob')
+plt.plot(x1, y1,'-r')
 plt.show()
+
+print('C_L_alpha in 1/deg is', gradient)
+print('C_L_alpha in 1/rad is', gradient*(180/np.pi))
+print('r_value is', r_value)
