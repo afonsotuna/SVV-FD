@@ -5,7 +5,7 @@ from scipy import io
 
 # UNITS:
 # Masses in [lbs]
-# Moments in [lbs-in]
+# Moments in [lbs-in/100]
 
 # CONVERSION FACTORS
 in_to_m = 2.54E-2
@@ -40,7 +40,7 @@ with open('Weight and Balance/fuel.txt') as f:
 fuel_moment = lambda m: np.interp(m, x, y)
 
 # INITIAL FUEL SPECIFICATION
-fuel_init = 4050.0
+fuel_init = 2700.0
 masses['fuel'] = fuel_init
 moments['fuel'] = fuel_moment(fuel_init)
 
@@ -71,14 +71,15 @@ def mass(t):
 def cg(t):
     masses['fuel'] = fuel_init
     moments['fuel'] = fuel_moment(fuel_init)
+    moments['seat8'] = 86 * 288 / lbs_to_kg / 100
     if t >= 9:
         fuel = fuel_init - fuel_used(t)
         assert fuel >= 0, 'Block fuel depleted at given time.'
         masses['fuel'] = fuel
         moments['fuel'] = fuel_moment(fuel)
-        return sum(moments.values()) * 100 / sum(masses.values())
-    else:
-        return sum(moments.values()) * 100 / sum(masses.values())
+    if 47 * 60 <= t < 49 * 60:
+        moments['seat8'] = 86 * 131 / lbs_to_kg / 100
+    return sum(moments.values()) * 100 / sum(masses.values())
 
 
 
