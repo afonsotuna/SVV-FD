@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import xlrd
 from scipy import stats
 from Reduction_function import reduce
-import
+from Weight_and_Balance.weight_cg import cg
 
 rho0 = 1.2250
 g = 9.81

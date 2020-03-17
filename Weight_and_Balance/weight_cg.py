@@ -16,7 +16,7 @@ masses = {'BEM': 9165.0}
 moments = {'BEM': 9165.0 * 291.65 / 100}
 
 # INITIAL PAYLOAD SPECIFICATION
-with open('Weight and Balance/payload.txt') as f:
+with open('payload.txt') as f:
     # INPUT: file with position, arm, mass [kg]
     # OUTPUT: moments and masses dictionaries in lbs-in/100 and lbs respectively
     for line in f:
@@ -30,7 +30,7 @@ with open('Weight and Balance/payload.txt') as f:
 x = []
 y = []
 
-with open('Weight and Balance/fuel.txt') as f:
+with open('fuel.txt') as f:
     for line in f:
         line = line.strip()
         line = line.split(',')
@@ -45,7 +45,7 @@ masses['fuel'] = fuel_init
 moments['fuel'] = fuel_moment(fuel_init)
 
 # IMPORTING FUEL USED DATA
-mat = io.loadmat('Weight and Balance/reference_clean.mat')
+mat = io.loadmat('reference_clean.mat')
 flight_data = mat['clean_data']
 left_FU = flight_data[:, 13]
 right_FU = flight_data[:, 14]
