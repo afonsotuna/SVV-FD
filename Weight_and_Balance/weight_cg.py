@@ -1,7 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy import io
-#======================================= WEIGHT AND CENTRE OF GRAVITY AS FUNCTIONS OF TIME =======================================
+
+# ======================================= WEIGHT AND CENTRE OF GRAVITY AS FUNCTIONS OF TIME ============================
 
 # UNITS:
 # Masses in [lbs]
@@ -53,6 +54,7 @@ time = flight_data[:, 47]
 
 fuel_used = lambda t: np.interp(t, time, left_FU) + np.interp(t, time, right_FU)
 
+
 # DEFINE MASS [lbs] AS A FUNCTION OF TIME [s]
 def mass(t):
     masses['fuel'] = fuel_init
@@ -65,6 +67,7 @@ def mass(t):
         return sum(masses.values())
     else:
         return sum(masses.values())
+
 
 # DEFINE CENTRE OF GRAVITY LOCATION [in] AS A FUNCTION OF TIME [s]
 # DATUM: NOSE
@@ -80,14 +83,3 @@ def cg(t):
     if 47 * 60 <= t < 49 * 60:
         moments['seat8'] = 86 * 131 / lbs_to_kg / 100
     return sum(moments.values()) * 100 / sum(masses.values())
-
-
-
-
-
-
-
-
-
-
-
