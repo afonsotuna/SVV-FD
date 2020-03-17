@@ -36,5 +36,6 @@ avgC_L = np.average(C_L) # The two are actually almost the same
 C_m_deltae = (avgC_L * (cg2 - cg1) * 0.0254) / ((delta_e[1] - delta_e[0]) * c)
 C_m_deltae_rad = C_m_deltae * (180/np.pi)
 
-
+print(cg(46.9*60))
+print(cg(47.5*60))
 
