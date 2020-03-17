@@ -41,8 +41,6 @@ beta_0 = 0
 phi_0 = flight_data[index, 20] * m.pi / 180
 pb_2v_0 = (flight_data[index, 26] * b) / (2 * tas_event)
 rb_2v_0 = (flight_data[index, 28] * b) / (2 * tas_event)
-pb_2v_0 = flight_data[index, 26]
-rb_2v_0 = flight_data[index, 28]
 initial_cond = np.array([[beta_0], [phi_0], [pb_2v_0], [rb_2v_0]])
 
 # Obtain impulse response
@@ -60,8 +58,8 @@ out = -out
 y2 = out[1, :]  # Outputs: 0 - beta / 1 - phi / 2 - pb/2V / 3 - rb/2V
 # hehehe
 # IN DEBUGGING - DON'T TOUCH (currently looking at dutch roll 1 for reference data)
-# plt.plot(t1, y1, label='Reference data - phi')
-# plt.plot(t2, y2, label='System response - phi')
+plt.plot(t1, y1, label='Reference data - phi')
+plt.plot(t2, y2, label='System response - phi')
 plt.plot(t2, input_delta_a, label='Aileron input')
 plt.plot(t2, input_delta_r, label='Rudder input')
 plt.legend()

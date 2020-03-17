@@ -19,7 +19,7 @@ def ss_sym(rho=1.225, theta_0=0, m=4157.174, v=80):
     C_x_u = -0.0279
     C_x_alpha = -0.4797
     C_x_delta_e = -0.0373
-    C_x_q  = -0.2817
+    C_x_q = -0.2817
     C_x_0 = 2 * W * math.sin(theta_0) / (rho * v ** 2 * S)
 
     # normal force deriv.
