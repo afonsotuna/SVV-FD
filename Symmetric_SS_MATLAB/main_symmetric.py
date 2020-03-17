@@ -4,6 +4,7 @@ import scipy.io
 import numpy as np
 from Symmetric_SS_MATLAB.ss_symmetric import ss_sym
 import math as m
+
 # Define event (from flight test sheet)
 t_lookup = 3229  # time (in seconds) at which event happens
 t_limit = 200  # length of interval (in seconds, multiples of 0.1)
@@ -32,20 +33,20 @@ for i in range(n_points):
     data_event[i, 0] = flight_data[index + i, 47] - flight_data[index, 47]
     data_event[i, 1] = flight_data[index + i, 21]  # Outputs: ?? - u / 0 - alpha / 21 - theta / 26 - q
 t1 = data_event[:, 0]
-y1 = data_event[:, 1]* m.pi/180
+y1 = data_event[:, 1] * m.pi / 180
 
 # Define initial conditions
 u_hat_0 = 0
 alpha_0 = 0  # flight_data[index, 0]
-theta_0 = flight_data[index, 21] * m.pi/180
+theta_0 = flight_data[index, 21] * m.pi / 180
 qc_v_0 = (flight_data[index, 26] * c) / flight_data[index, 41]
 initial_cond = np.array([[u_hat_0], [alpha_0], [theta_0], [qc_v_0]])
 
 # Obtain impulse response
-input_delta_e = flight_data[index:index + n_points, 16]* m.pi/180
-sys = ss_sym(rho=1.028,m=mass_event, theta_0=theta_0, v=tas_event)
+input_delta_e = flight_data[index:index + n_points, 16] * m.pi / 180
+sys = ss_sym(rho=1.028, m=mass_event, theta_0=theta_0, v=tas_event)
 t2, out, p2 = control.forced_response(sys, T=t1, U=input_delta_e)
-y2 = out[2, :] + initial_cond[2] # Outputs: 0 - u / 1 - alpha / 2 - theta / 3 - q
+y2 = out[2, :] + initial_cond[2]  # Outputs: 0 - u / 1 - alpha / 2 - theta / 3 - q
 
 # IN DEBUGGING - DON'T TOUCH (currently looking at phugoid for reference data)
 plt.plot(t2, y2, label='System response - AoA')
