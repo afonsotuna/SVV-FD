@@ -118,8 +118,8 @@ def ss_asym(rho=1.225, theta_0=0, m=4157.174, v=80):
     C = np.identity(4)
     D = np.zeros((4, 2))
 
-    print(P, Q, R, A, B, C, D)
+    #print(P, Q, R, A, B, C, D)
 
     sys = control.StateSpace(A, B, C, D)  # the state vector = [beta, phi, pb/2V, rb/2V]
-    print(u_b, v)
+    #print(u_b, v)
     return sys
