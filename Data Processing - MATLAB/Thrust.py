@@ -12,8 +12,8 @@ p0 = 101325              # Pressure at sea level in ISA [Pa]
 gamm = 1.4               # Ratio of specific heats [-]
 m_f_std = 0.048          # Standard mass fuel flow [kg/s]
 
-ref = 0
-std_ff = 1
+ref = 0      # change to one to run for reference data
+std_ff = 1   # change to one to run with standard fuel flow
 
 # reading data unto pandas dataframe:
 if ref == 1:

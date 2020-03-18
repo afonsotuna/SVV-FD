@@ -14,7 +14,7 @@ g      = 9.81            # [m/sec^2] (gravity constant)
 p0 = 101325              # Pressure at sea level in ISA [Pa]
 gamm = 1.4               # Ratio of specific heats [-]
 S      = 30.00	         # wing area [m^2]
-W_s = 60500
+W_s = 60500              # standard weight [N]
 
 BEM = 9165               # Basic empty mass, taken from mass report for 2020 [lbs]
 
