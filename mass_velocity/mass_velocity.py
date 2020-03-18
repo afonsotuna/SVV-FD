@@ -37,3 +37,19 @@ def mass_velocity_flight(t):
     tas_event = flight_data[index, 42] * 0.514444
 
     return mass_event, tas_event
+
+short_period_mass, short_period_vel = mass_velocity_reference(3635)
+print("short period =", short_period_mass,short_period_vel)
+
+phugoid_mass, phugoid_vel = mass_velocity_reference(3237)
+print("phugoid =", phugoid_mass, phugoid_vel)
+
+dutch_roll_mass, dutch_roll_vel = mass_velocity_reference(3717)
+print("dutch roll =", dutch_roll_mass, dutch_roll_vel)
+
+spiral_mass, spiral_vel= mass_velocity_reference(3920)
+print("spiral =", spiral_mass, spiral_vel)
+
+
+aperiodic_mass, aperiodic_vel = mass_velocity_reference(3550)
+print("aperiodic =", aperiodic_mass,aperiodic_vel)
