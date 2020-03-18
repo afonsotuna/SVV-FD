@@ -46,7 +46,7 @@ masses['fuel'] = fuel_init
 moments['fuel'] = fuel_moment(fuel_init)
 
 # IMPORTING FUEL USED DATA
-mat = io.loadmat('clean_flight_data.mat')
+mat = io.loadmat('Data_repo/clean_flight_data.mat')
 flight_data = mat['clean_data']
 left_FU = flight_data[:, 14]
 right_FU = flight_data[:, 15]
