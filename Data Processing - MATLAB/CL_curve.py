@@ -18,9 +18,15 @@ W_s = 60500
 
 BEM = 9165               # Basic empty mass, taken from mass report for 2020 [lbs]
 
+ref = 1
+
 # reading data unto pandas dataframe:
-ref_data = 'Post_Flight_Datasheet_Flight_1_DD_12_3_2018.xlsx'
-data = Pd.read_excel(ref_data, header=24, usecols='B, D:J', skiprows=[26], nrows=7)
+if ref == 1:
+    exc_data = 'Post_Flight_Datasheet_Flight_1_DD_12_3_2018.xlsx'
+else:
+    exc_data = 'C:/Users/nano2598\Documents/actual college ugh/Third year/SVV-FD/Data_repo/20200311_V4.xlsx'
+data = Pd.read_excel(exc_data, header=24, usecols='B, D:J', skiprows=[26], nrows=7)
+
 #print(data)
 hp = data['hp'].iloc[1:].to_numpy(dtype=float)  # Putting pressure alt (hp) values from the dataframe column to np array
 V_ias = data['IAS'].iloc[1:].to_numpy(dtype=float)    # Putting V_IAS values from the dataframe column to np array
@@ -29,8 +35,8 @@ Tm = data['TAT'].iloc[1:].to_numpy(dtype=float)     # Putting TAT values from th
 V_e, T, M = reduce(hp, V_ias, Tm)
 F_used = data['F. used'].iloc[1:].to_numpy(dtype=float)  # Same as what's done above but for fuel used
 
-pax_masses = np.array(Pd.read_excel(ref_data, header=None, usecols='H', skiprows=7, nrows=9))
-init_fuel = xlrd.open_workbook(ref_data).sheet_by_index(0).cell_value(17, 3)
+pax_masses = np.array(Pd.read_excel(exc_data, header=None, usecols='H', skiprows=7, nrows=9))
+init_fuel = xlrd.open_workbook(exc_data).sheet_by_index(0).cell_value(17, 3)
 ramp_mass = (BEM + init_fuel)*0.453592 + np.sum(pax_masses)  # Calculating total ramp mass, converting some lbs terms to kg
 mass = ramp_mass - F_used * 0.453592                         # Mass at each data point, also converting to kg
 

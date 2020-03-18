@@ -11,8 +11,15 @@ g      = 9.81            # [m/sec^2] (gravity constant)
 p0 = 101325              # Pressure at sea level in ISA [Pa]
 gamm = 1.4               # Ratio of specific heats [-]
 
-ref_data = 'Post_Flight_Datasheet_Flight_1_DD_12_3_2018.xlsx'
-data = Pd.read_excel(ref_data, header=24, usecols='B, D:J', skiprows=[26], nrows=7)
+ref = 1
+
+# reading data unto pandas dataframe:
+if ref == 1:
+    exc_data = 'Post_Flight_Datasheet_Flight_1_DD_12_3_2018.xlsx'
+else:
+    exc_data = 'C:/Users/nano2598\Documents/actual college ugh/Third year/SVV-FD/Data_repo/20200311_V4.xlsx'
+
+data = Pd.read_excel(exc_data, header=24, usecols='B, D:J', skiprows=[26], nrows=7)
 print(data)
 
 hp = data['hp'].iloc[1:].to_numpy(dtype=float)
