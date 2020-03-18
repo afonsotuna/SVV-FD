@@ -70,9 +70,9 @@ def plot_compare():  # OUTPUTS: 0 - u (not working) / 1 - alpha / 2 - theta / 3 
             y2 = out[3, :] * (flight_data[index, 41] / c) + initial_cond[3]
 
         # IN DEBUGGING - DON'T TOUCH (currently looking at phugoid for reference data)
-        plt.plot(t2, y2, label='System response')
-        plt.plot(t1, y1, label='Reference data')
-        # plt.plot(t2, input_delta_e, label='Elevator input')
+        #plt.plot(t2, y2, label='System response')
+        #plt.plot(t1, y1, label='Reference data')
+        plt.plot(t2, input_delta_e, label='Elevator input')
         plt.legend()
         plt.xlabel('Reference data vs system response between ' + str(int(t_lookup)) + ' [s] and ' + str(
             int(t_interval)) + ' [s] ' + motion + '.')
@@ -84,8 +84,8 @@ def plot_compare():  # OUTPUTS: 0 - u (not working) / 1 - alpha / 2 - theta / 3 
             plt.ylabel('Pitch rate q [radians/s]')
         plt.show()
     else:
-        file_name = input("What is the .mat file name? (no extension, must be in this directory)")
-        plot_compare_flight(t_0, delta_t, motion_str, output, file_name)
+        #file_name = input("What is the .mat file name? (no extension, must be in this directory)")
+        plot_compare_flight(t_0, delta_t, motion_str, output, file_name='flight1_clean')
     return
 
 
@@ -150,7 +150,7 @@ def plot_compare_flight(t_0, delta_t, motion_str, output, file_name):
     # Plot making
     plt.plot(t2, y2, label='System response')
     plt.plot(t1, y1, label='Reference data')
-    # plt.plot(t2, input_delta_e, label='Elevator input')
+    #plt.plot(t2, input_delta_e, label='Elevator input')
     plt.legend()
     plt.xlabel('Reference data vs system response between ' + str(int(t_lookup)) + ' [s] and ' + str(
         int(t_interval)) + ' [s] ' + motion + '.')
