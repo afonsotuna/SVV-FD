@@ -10,8 +10,10 @@ R      = 287.05          # specific gas constant [m^2/sec^2K]
 g      = 9.81            # [m/sec^2] (gravity constant)
 p0 = 101325              # Pressure at sea level in ISA [Pa]
 gamm = 1.4               # Ratio of specific heats [-]
+m_f_std = 0.048          # Standard mass fuel flow [kg/s]
 
-ref = 1
+ref = 0
+std_ff = 1
 
 # reading data unto pandas dataframe:
 if ref == 1:
@@ -22,7 +24,7 @@ else:
 data = Pd.read_excel(exc_data, header=24, usecols='B, D:J', skiprows=[26], nrows=7)
 print(data)
 
-hp = data['hp'].iloc[1:].to_numpy(dtype=float)
+hp = data['hp'].iloc[1:].to_numpy(dtype=float) * 0.3048
 
 V_ias = data['IAS'].iloc[1:].to_numpy(dtype=float)    # Putting V_IAS values from the dataframe column to np array
 
@@ -33,6 +35,11 @@ Tm = data['TAT'].iloc[1:].to_numpy(dtype=float)     # Putting TAT values from th
 
 V_e, T, M = reduce(hp, V_ias, Tm)
 delta_T = T - (Temp0 + lamb * hp)
+
+if std_ff == 1:
+    for i in range(np.shape(FFr)[0]):
+        FFl[i] = m_f_std
+        FFr[i] = m_f_std
 
 f = open("matlab.dat", "w+")
 for i in range (np.shape(M)[0]):
