@@ -46,11 +46,11 @@ masses['fuel'] = fuel_init
 moments['fuel'] = fuel_moment(fuel_init)
 
 # IMPORTING FUEL USED DATA
-mat = io.loadmat('reference_clean.mat')
+mat = io.loadmat('clean_flight_data.mat')
 flight_data = mat['clean_data']
 left_FU = flight_data[:, 14]
 right_FU = flight_data[:, 15]
-time = flight_data[:, 47]
+time = flight_data[:, 48]
 
 fuel_used = lambda t: np.interp(t, time, left_FU) + np.interp(t, time, right_FU)
 
