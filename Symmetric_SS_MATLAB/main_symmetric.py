@@ -67,7 +67,7 @@ def plot_compare():  # OUTPUTS: 0 - u (not working) / 1 - alpha / 2 - theta / 3 
         elif output == 2:
             y2 = out[2, :] + initial_cond[2]
         elif output == 3:
-            y2 = out[2, :] * (flight_data[index, 41] / c) + initial_cond[2]
+            y2 = out[3, :] * (flight_data[index, 41] / c) + initial_cond[3]
 
         # IN DEBUGGING - DON'T TOUCH (currently looking at phugoid for reference data)
         plt.plot(t2, y2, label='System response')
@@ -145,7 +145,7 @@ def plot_compare_flight(t_0, delta_t, motion_str, output, file_name):
     elif output == 2:
         y2 = out[2, :] + initial_cond[2]
     elif output == 3:
-        y2 = out[2, :] * (flight_data[index, 42] / c) + initial_cond[2]
+        y2 = out[3, :] * (flight_data[index, 42] / c) + initial_cond[3]
 
     # Plot making
     plt.plot(t2, y2, label='System response')
