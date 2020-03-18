@@ -1,7 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy import io
-#======================================= WEIGHT AND CENTRE OF GRAVITY AS FUNCTIONS OF TIME =======================================
+
+# ======================================= WEIGHT AND CENTRE OF GRAVITY AS FUNCTIONS OF TIME ============================
 
 # UNITS:
 # Masses in [lbs]
@@ -40,20 +41,25 @@ with open('fuel.txt') as f:
 fuel_moment = lambda m: np.interp(m, x, y)
 
 # INITIAL FUEL SPECIFICATION
-fuel_init = 4050
+fuel_init = 2700.0
 masses['fuel'] = fuel_init
 moments['fuel'] = fuel_moment(fuel_init)
 
 # IMPORTING FUEL USED DATA
-mat = io.loadmat('reference_clean.mat')
+mat = io.loadmat('clean_flight_data.mat')
 flight_data = mat['clean_data']
-left_FU = flight_data[:, 13]
-right_FU = flight_data[:, 14]
-time = flight_data[:, 47]
+left_FU = flight_data[:, 14]
+right_FU = flight_data[:, 15]
+time = flight_data[:, 48]
 
 fuel_used = lambda t: np.interp(t, time, left_FU) + np.interp(t, time, right_FU)
 
-# DEFINE MASS [lbs] AS A FUNCTION OF TIME [s]
+# DEFINITION OF XLEMAC AND XTEMAC to calculate MAC [in]
+xlemac = 261.45
+xtemac = 342.43
+mac = xtemac - xlemac
+
+# DEFINE MASS [kg] AS A FUNCTION OF TIME [s]
 def mass(t):
     masses['fuel'] = fuel_init
     moments['fuel'] = fuel_moment(fuel_init)
@@ -62,33 +68,23 @@ def mass(t):
         assert fuel >= 0, 'Block fuel depleted at given time.'
         masses['fuel'] = fuel
         moments['fuel'] = fuel_moment(fuel)
-        return sum(masses.values())
+        return f'{round(sum(masses.values()) * lbs_to_kg, 3)} kg'
     else:
-        return sum(masses.values())
+        return f'{round(sum(masses.values()) * lbs_to_kg, 3)} kg'
 
-# DEFINE CENTRE OF GRAVITY LOCATION [in] AS A FUNCTION OF TIME [s]
-# DATUM: NOSE
+
+# DEFINE CENTRE OF GRAVITY LOCATION [% MAC] AS A FUNCTION OF TIME [s]
+# DATUM: LEMAC
 def cg(t):
     masses['fuel'] = fuel_init
     moments['fuel'] = fuel_moment(fuel_init)
-    moments['seat8'] = 68 * 288 / lbs_to_kg / 100
+    moments['seat8'] = 86 * 288 / lbs_to_kg / 100
     if t >= 9:
         fuel = fuel_init - fuel_used(t)
         assert fuel >= 0, 'Block fuel depleted at given time.'
         masses['fuel'] = fuel
         moments['fuel'] = fuel_moment(fuel)
     if 47 * 60 <= t < 49 * 60:
-        moments['seat8'] = 68 * 131 / lbs_to_kg / 100
-    return sum(moments.values()) * 100 / sum(masses.values())
-
-for i in np.linspace(46.9*60, 49.1*60, 5):
-    print(cg(i))
-
-
-
-
-
-
-
-
-
+        moments['seat8'] = 86 * 131 / lbs_to_kg / 100
+    cg = sum(moments.values()) * 100 / sum(masses.values())
+    return f'{round((cg - xlemac) / mac * 100, 3)} % MAC'
