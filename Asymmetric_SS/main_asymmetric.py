@@ -27,6 +27,7 @@ used_fuel = flight_data[index, 13] + flight_data[index, 14]
 mass_event = (block_fuel - used_fuel + 9165) * 0.453592 + passenger_weight
 tas_event = flight_data[index, 41] * 0.514444
 
+
 # Obtain correspondent flight data
 data_event = np.zeros((n_points, 2))
 for i in range(n_points):
