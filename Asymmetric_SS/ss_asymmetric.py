@@ -3,7 +3,7 @@ import numpy as np
 import control
 
 
-def ss_asym(rho=1.225, theta_0=0, m=4157.174, v=80):
+def ss_asym(rho=1.225, theta_0=0, m=4157.174, v=80, Kzz=(0.042) ** 0.5, Cn_r=-0.2061, CY_b=-0.7500):
     # dimensions
     W = m * 9.81
     S = 30  # m^2
@@ -15,11 +15,11 @@ def ss_asym(rho=1.225, theta_0=0, m=4157.174, v=80):
 
     # inertia
     K_xx = (0.019) ** 0.5
-    K_zz = (0.042) ** 0.5
+    K_zz = Kzz
     K_xz = 0.002
 
     # LATERAL FORCE DERIVATIVES
-    CY_b = -0.7500
+    CY_b = CY_b
     CY_b_d = 0  # bd stands for derivative of beta
     CY_p = -0.0304
     CY_r = 0.8495
@@ -37,7 +37,7 @@ def ss_asym(rho=1.225, theta_0=0, m=4157.174, v=80):
     Cn_b = 0.1348
     Cn_b_d = 0  # bd stands for derivative of beta
     Cn_p = -0.0602
-    Cn_r = -0.2061
+    Cn_r = Cn_r
     Cn_sa = -0.0120  # derivative to aileron deflection
     Cn_sr = -0.0939  # derivative to rudder deflection
 
@@ -118,8 +118,8 @@ def ss_asym(rho=1.225, theta_0=0, m=4157.174, v=80):
     C = np.identity(4)
     D = np.zeros((4, 2))
 
-    #print(P, Q, R, A, B, C, D)
+    # print(P, Q, R, A, B, C, D)
 
     sys = control.StateSpace(A, B, C, D)  # the state vector = [beta, phi, pb/2V, rb/2V]
-    #print(u_b, v)
+    # print(u_b, v)
     return sys
