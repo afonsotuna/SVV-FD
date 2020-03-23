@@ -2,7 +2,7 @@ import pandas as Pd
 import numpy as np
 import matplotlib.pyplot as plt
 import xlrd
-from scipy import stats
+from scipy import stats, optimize
 from Reduction_function import reduce
 
 rho0 = 1.2250
@@ -107,6 +107,14 @@ delta_e_red = defl - (C_m_T_c/C_m_deltae) * (thr_coeff_std - thr_coeff)
 print(delta_e_red)
 print(V_e_red2)
 
+def inv_f (x, a, b):
+    return (a + (b/x ** 2))
+
+popt, pcov = optimize.curve_fit(inv_f, V_e_red2, delta_e_red)
+print(popt)
+x1 = np.linspace(1, 250, 250)
+plt.plot(x1, inv_f(x1, *popt), 'r')
 plt.scatter(V_e_red2, delta_e_red, marker='x')
-#plt.plot(x1, y1,'-g')
+plt.ylim((4, -4))
+plt.xlim((50, 225))
 plt.show()
