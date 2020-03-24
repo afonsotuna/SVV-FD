@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 from scipy.optimize import minimize
 import numpy as np
-from Asymmetric_SS.main_asymmetric import num_model_asym_reference
+from main_asymmetric import num_model_asym_reference
 
 
 def error_def(y1, y2):
