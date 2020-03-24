@@ -16,7 +16,7 @@ def ss_sym(rho=1.225, theta_0=0, m=4157.174, v=80):
     K_yy = 1.3925 ** 0.5
 
     # long. force deriv.
-    C_x_u = -0.0279
+    C_x_u = -0.095
     C_x_alpha = -0.4797
     C_x_delta_e = -0.0373
     C_x_q = -0.2817
