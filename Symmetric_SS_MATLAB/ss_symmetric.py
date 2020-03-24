@@ -3,7 +3,7 @@ import numpy as np
 import control
 
 
-def ss_sym(rho=1.225, theta_0=0, m=4157.174, v=80):
+def ss_sym(rho=1.225, theta_0=0, m=4157.174, v=80, C_m_alpha=-0.7249, C_m_delta_e = -1.4968, C_m_q = -8.7941):
     # dimensions
     W = m * 9.81
     S = 30  # m^2
@@ -32,10 +32,10 @@ def ss_sym(rho=1.225, theta_0=0, m=4157.174, v=80):
 
     # pitch moment deriv.
     C_m_u = 0.0699
-    C_m_alpha = -0.7249  # UPDATE, previous -0.5626
+    C_m_alpha = C_m_alpha  # UPDATE, previous -0.5626
     C_m_alphad = 0.1780
-    C_m_q = -8.7941
-    C_m_delta_e = -1.4968  # UPDATED, previous was -1.1642
+    C_m_q = C_m_q
+    C_m_delta_e = C_m_delta_e  # UPDATED, previous was -1.1642
 
     # MATRICES
     P = c / v * np.array(
