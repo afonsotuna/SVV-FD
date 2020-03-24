@@ -89,4 +89,4 @@ def make_plot_asym(output=1, dutch_roll=True, t_lookup=3717, t_limit=14, block_f
 
 
 #make_plot_asym(output=3, CY_b=-0.7419644366092554,Cn_r=-0.1552558675361675, Cn_p=0.0, Cl_r=0, Cl_p=-0.6898931437580158)
-make_plot_asym(output=3, dutch_roll= False, t_lookup=3920, t_limit=30)
+#make_plot_asym(output=3, dutch_roll= False, t_lookup=3920, t_limit=15)
