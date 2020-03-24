@@ -48,13 +48,13 @@ def CL_curve (ref, data=None, plot=0):  ## Use ref = 1 for ref data, any other n
     aoa = data['a'].iloc[1:].to_numpy(dtype=float)
 
     gradient, intercept, r_value, p_value, std_err = stats.linregress(aoa, C_L)
-    mn = np.min(aoa)
-    mx = np.max(aoa)
-    x1 = np.linspace(mn,mx,500)
-    y1 = gradient*x1+intercept
-    plt.scatter(aoa, C_L, marker='x')
-    plt.plot(x1, y1,'-g')
     if plot == 1:
+        mn = np.min(aoa)
+        mx = np.max(aoa)
+        x1 = np.linspace(mn, mx, 500)
+        y1 = gradient * x1 + intercept
+        plt.scatter(aoa, C_L, marker='x')
+        plt.plot(x1, y1, '-g')
         plt.show()
 
     #print('C_L_alpha in 1/deg is', gradient)
