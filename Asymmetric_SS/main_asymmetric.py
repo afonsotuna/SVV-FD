@@ -48,11 +48,6 @@ def num_model_asym_reference(output=1, t_lookup=3717, t_limit=14, eigenmotion = 
     t1 = data_event[:, 0]
     y1 = data_event[:, 1] * m.pi / 180
 
-    # Obtain impulse response
-    # input_delta_a = flight_data[index:index + n_points, 15] * m.pi / 180 + 0.006983947075106035
-    # input_delta_r = flight_data[index:index + n_points, 17] * m.pi / 180 + 0 * 0.022041530548663223
-    # input_tot = np.array([input_delta_a, input_delta_r])
-
     if eigenmotion == "dutch roll":
         input_delta_a = flight_data[index:index + n_points, 15] * m.pi / 180 - flight_data[index+n_points, 15] * m.pi/180
         input_delta_r = flight_data[index:index + n_points, 17] * m.pi / 180
@@ -130,5 +125,5 @@ def make_plot_asym(output=1, eigenmotion = "dutch roll", t_lookup=3717, t_limit=
     return
 
 
-#make_plot_asym(output=3, CY_b=-0.7419644366092554,Cn_r=-0.1552558675361675, Cn_p=0.0, Cl_r=0, Cl_p=-0.6898931437580158)
-make_plot_asym(output=1, eigenmotion = "spiral", t_lookup=3900, t_limit=120)
+make_plot_asym(output=1, eigenmotion = "spiral", t_lookup=3900, t_limit=120, CY_b=-2.5246936822596595,Cn_r=0, Cn_p=0.0, Cl_r=0.09370939257487754, Cl_p=-0.816106143365501)
+#make_plot_asym(output=2, eigenmotion = "aperiodic", t_lookup=3550, t_limit=14)
