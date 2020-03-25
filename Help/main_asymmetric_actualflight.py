@@ -6,8 +6,8 @@ from ss_asymmetric import ss_asym
 import math as m
 
 
-def num_model_asym_reference(output=1, t_lookup=3717, t_limit=14, eigenmotion = "dutch roll", block_fuel=2700, passenger_weight=771, b=15.911,
-                             CY_b=-0.7500, Cn_r=-0.2061, Cn_p=-0.0602, Cl_r=0.2376, Cl_p=-0.7108):
+def num_model_asym_data(output=1, t_lookup=3717, t_limit=14, eigenmotion="dutch roll", block_fuel=2700,
+                        passenger_weight=771, CY_b=-0.7500, Cn_r=-0.2061, Cn_p=-0.0602, Cl_r=0.2376, Cl_p=-0.7108):
     # Outputs: 1 - phi / 2 - pb/2V / 3 - rb/2V
 
     t_interval = t_lookup + t_limit
@@ -81,17 +81,18 @@ def num_model_asym_reference(output=1, t_lookup=3717, t_limit=14, eigenmotion = 
     # flight data, model response, time vectors and input vectors
     return y1, y2, t1, t2, input_delta_a, input_delta_r, t_lookup, t_interval
 
-def make_plot_asym(output=1, eigenmotion = "dutch roll", t_lookup=3717, t_limit=14, block_fuel=2700, passenger_weight=771, b=15.911, CY_b=-0.7500,
-                   Cn_r=-0.2061, Cn_p=-0.0602, Cl_r=0.2376, Cl_p=-0.7108):
-    y1, y2, t1, t2, input_delta_a, input_delta_r, t_lookup, t_interval = num_model_asym_reference(output=output,
-                                                                                                  t_lookup=t_lookup,
-                                                                                                  t_limit=t_limit,
-                                                                                                  eigenmotion=eigenmotion,
-                                                                                                  block_fuel=block_fuel,
-                                                                                                  passenger_weight=passenger_weight,
-                                                                                                  b=b, CY_b=CY_b,
-                                                                                                  Cn_r=Cn_r, Cn_p=Cn_p,
-                                                                                                  Cl_r=Cl_r, Cl_p=Cl_p)
+
+def make_plot_asym(output=1, eigenmotion="dutch roll", t_lookup=3717, t_limit=14, block_fuel=4050, passenger_weight=695,
+                   CY_b=-0.7500, Cn_r=-0.2061, Cn_p=-0.0602, Cl_r=0.2376, Cl_p=-0.7108):
+    y1, y2, t1, t2, input_delta_a, input_delta_r, t_lookup, t_interval = num_model_asym_data(output=output,
+                                                                                             t_lookup=t_lookup,
+                                                                                             t_limit=t_limit,
+                                                                                             eigenmotion=eigenmotion,
+                                                                                             block_fuel=block_fuel,
+                                                                                             passenger_weight=passenger_weight,
+                                                                                             CY_b=CY_b,
+                                                                                             Cn_r=Cn_r, Cn_p=Cn_p,
+                                                                                             Cl_r=Cl_r, Cl_p=Cl_p)
 
     if output == 1:
         plt.plot(t1, y1, label=r'Reference data - $\phi$')

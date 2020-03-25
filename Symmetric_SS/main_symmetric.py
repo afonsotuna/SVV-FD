@@ -13,53 +13,59 @@ def num_model_sym_data(output=1, t_lookup=3717, t_limit=14, block_fuel=2700, pas
     t_interval = t_lookup + t_limit
 
     # Flight data imported
-    mat = scipy.io.loadmat('clean_flight_data.mat')
-    flight_data = mat['clean_data']
+    mat = scipy.io.loadmat('flight_actual.mat')
+    flight_data = mat['flightdata']
+    flight_data = flight_data[0, 0]
 
     # Get data location
-    index = int((t_lookup - flight_data[0, 48]) / 0.1)
+    index = int((t_lookup - flight_data['time'][0][0][0][0][0]) / 0.1)
     n_points = int(t_limit / 0.1) + 1
 
     # Obtain correct weight (manoeuvre start) and velocity, get system
-    used_fuel = flight_data[index, 14] + flight_data[index, 15]
+    used_fuel = flight_data['lh_engine_FU'][0][0][0][index] + flight_data['rh_engine_FU'][0][0][0][index]
     mass_event = (block_fuel - used_fuel + 9165) * 0.453592 + passenger_weight
-    tas_event = flight_data[index, 42] * 0.514444
+    tas_event = flight_data['Dadc1_tas'][0][0][0][index] * 0.514444
 
     # obtain correct rho
-    h_p = flight_data[index, 37] * 0.3048
+    h_p = flight_data['Dadc1_alt'][0][0][0][index] * 0.3048
     p = 101325 * (1 + (-0.0065 * h_p / 288.15)) ** (-9.81 / (-0.0065 * 287.05))
-    T = flight_data[index, 35] + 273.15
+    T = flight_data['Dadc1_sat'][0][0][0][index] + 273.15
     rho = p / (287.05 * T)
 
     # Obtain correspondent flight data
     data_event = np.zeros((n_points, 2))
     if output == 1:
         for i in range(n_points):
-            data_event[i, 0] = flight_data[index + i, 48] - flight_data[index, 48]
-            data_event[i, 1] = flight_data[index + i, 0] - flight_data[index, 0]  # Output alpha
+            data_event[i, 0] = flight_data['time'][0][0][0][0][index + i] - flight_data['time'][0][0][0][0][index]
+            data_event[i, 1] = flight_data['vane_AOA'][0][0][0][index + i] - flight_data['vane_AOA'][0][0][0][
+                index]  # Output alpha
     elif output == 2:
         for i in range(n_points):
-            data_event[i, 0] = flight_data[index + i, 48] - flight_data[index, 48]
-            data_event[i, 1] = (flight_data[index + i, 22]) - (flight_data[index, 22])  # Output theta
+            data_event[i, 0] = flight_data['time'][0][0][0][0][index + i] - flight_data['time'][0][0][0][0][index]
+            data_event[i, 1] = flight_data['Ahrs1_Pitch'][0][0][0][index + i] - flight_data['Ahrs1_Pitch'][0][0][0][
+                index]  # Output theta
     elif output == 3:
         for i in range(n_points):
-            data_event[i, 0] = flight_data[index + i, 48] - flight_data[index, 48]
-            data_event[i, 1] = ((flight_data[index + i, 27] * c) / flight_data[index, 42])  # Output q
+            data_event[i, 0] = flight_data['time'][0][0][0][0][index + i] - flight_data['time'][0][0][0][0][index]
+            data_event[i, 1] = (flight_data['Ahrs1_bPitchRate'][0][0][0][index + i] * c) / \
+                               flight_data['Dadc1_tas'][0][0][0][index]  # Output q
     t1 = data_event[:, 0]
     y1 = data_event[:, 1] * m.pi / 180
 
     # Define initial conditions
     u_hat_0 = 0
     alpha_0 = 0  # flight_data[index, 0]
-    theta_0 = flight_data[index, 22] * m.pi / 180
-    qc_v_0 = (flight_data[index, 27] * c) / flight_data[index, 42]
+    theta_0 = flight_data['Ahrs1_Pitch'][0][0][0][index] * m.pi / 180
+    qc_v_0 = (flight_data['Ahrs1_bPitchRate'][0][0][0][index] * c) / flight_data['Dadc1_tas'][0][0][0][index]
     initial_cond = np.array([[u_hat_0], [alpha_0], [theta_0], [qc_v_0]])
 
     # Obtain impulse response
-    input_delta_e = -flight_data[index:index + n_points, 16] * m.pi / 180
-    sys = ss_sym(rho=rho, m=mass_event, theta_0=theta_0, v=tas_event, C_x_q=C_x_q, C_z_q=C_z_q, C_m_alpha=C_m_alpha,
-                 C_m_delta_e=C_m_delta_e, C_m_q=C_m_q)
-    t2, out, p2 = control.forced_response(sys, T=t1, U=input_delta_e)
+    input_delta_e = (flight_data['delta_e'][0][0][0][index:index + n_points]) * m.pi / 180
+    input_tot = np.array([input_delta_e[:, 0]], dtype='float')
+
+    sys = ss_sym(rho=float(rho), m=float(mass_event), theta_0=float(theta_0), v=float(tas_event), C_x_q=C_x_q,
+                 C_z_q=C_z_q, C_m_alpha=C_m_alpha, C_m_delta_e=C_m_delta_e, C_m_q=C_m_q)
+    t2, out, p2 = control.forced_response(sys, T=t1, U=input_tot)
 
     y2 = out[output, :]
 
@@ -115,10 +121,15 @@ def make_plot_sym_data(output=1, t_lookup=3717, t_limit=14, block_fuel=2700, pas
 
     return
 
-# t_rn = 3125
-# t_lim = 30
-#
-# make_plot_sym_data(output=1,t_lookup=t_rn,t_limit=t_lim)
-# make_plot_sym_data(output=2,t_lookup=t_rn,t_limit=t_lim)
-# make_plot_sym_data(output=3,t_lookup=t_rn,t_limit=t_lim)
-# make_plot_sym(output=3, t_lookup=3229, t_limit=200, C_x_q=-13.193219977520021, C_z_q=-7.130847541981485, C_m_alpha=-0.21272996346475043, C_m_delta_e=-0.6919484170523861,C_m_q=-11.722501242413275)
+
+t_rn = 3126
+t_lim = 40
+C_x_q, C_z_q, C_m_alpha, C_m_delta_e, C_m_q = -0.2817, -5.6629, -0.7249, -1.4968, -8.7941
+# C_x_q, C_z_q, C_m_alpha, C_m_delta_e,C_m_q = -13.193219977520021, -7.130847541981485, -0.21272996346475043, -0.6919484170523861,-11.722501242413275
+
+make_plot_sym_data(output=1, t_lookup=t_rn, t_limit=t_lim, C_x_q=C_x_q, C_z_q=C_z_q, C_m_alpha=C_m_alpha,
+                   C_m_delta_e=C_m_delta_e, C_m_q=C_m_q)
+make_plot_sym_data(output=2, t_lookup=t_rn, t_limit=t_lim, C_x_q=C_x_q, C_z_q=C_z_q, C_m_alpha=C_m_alpha,
+                   C_m_delta_e=C_m_delta_e, C_m_q=C_m_q)
+make_plot_sym_data(output=3, t_lookup=t_rn, t_limit=t_lim, C_x_q=C_x_q, C_z_q=C_z_q, C_m_alpha=C_m_alpha,
+                   C_m_delta_e=C_m_delta_e, C_m_q=C_m_q)
