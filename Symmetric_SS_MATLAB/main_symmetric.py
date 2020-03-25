@@ -6,169 +6,116 @@ from Symmetric_SS_MATLAB.ss_symmetric import ss_sym
 import math as m
 
 
-def plot_compare():  # OUTPUTS: 0 - u (not working) / 1 - alpha / 2 - theta / 3 - q
-    reference = int(input("Flight data (0) or reference data (1)?"))
-    motion_str = input("What's the motion? (no capitals)")
-    t_0 = int(input("Starting time? (s)"))
-    delta_t = int(input("Event duration? (s)"))
-    output = int(input("Output? 1 - alpha / 2 - theta / 3 - q"))
-    if reference:
-        # Flight data imported
-        mat = scipy.io.loadmat('reference_clean.mat')
-        flight_data = mat['clean_data']
+def num_model_sym_reference(output=1, t_lookup=3717, t_limit=14, block_fuel=4050, passenger_weight=695, c=2.0569,
+                            C_x_q=-0.2817, C_z_q=-5.6629, C_m_alpha=-0.7249, C_m_delta_e=-1.4968, C_m_q=-8.7941):
+    # Outputs: 1 - alpha / 2 - theta / 3 - q
 
-        # Define event (from flight test sheet)
-        t_lookup = t_0 - flight_data[0, 47]  # time (in seconds) at which event happens
-        t_limit = delta_t  # length of interval (in seconds, multiples of 0.1)
-        t_interval = t_lookup + t_limit
-        block_fuel = 4050  # block fuel (lbs)
-        passenger_weight = 695  # sum of passenger weight (kgs)
-        c = 2.0569
-        motion = '(' + motion_str + ')'
+    t_interval = t_lookup + t_limit
 
-        # Get data location
-        index = int((t_lookup - flight_data[0, 47]) / 0.1)
-        n_points = int(t_limit / 0.1) + 1
-
-        # Obtain correct weight (manoeuvre start) and velocity, get system
-        used_fuel = flight_data[index, 13] + flight_data[index, 14]
-        mass_event = (block_fuel - used_fuel + 9165) * 0.453592 + passenger_weight
-        # print(mass_event)
-        tas_event = flight_data[index, 41] * 0.514444
-
-        # Obtain correspondent flight data
-        data_event = np.zeros((n_points, 2))
-        for i in range(n_points):
-            data_event[i, 0] = flight_data[index + i, 47] - flight_data[index, 47]
-            if output == 1:
-                column_index_data = 0
-            elif output == 2:
-                column_index_data = 21
-            elif output == 3:
-                column_index_data = 26
-            data_event[i, 1] = flight_data[
-                index + i, column_index_data]  # Outputs: ?? - u / 0 - alpha / 21 - theta / 26 - q
-        t1 = data_event[:, 0]
-        y1 = data_event[:, 1] * m.pi / 180
-
-        # Define initial conditions
-        u_hat_0 = 0
-        alpha_0 = 0  # flight_data[index, 0]
-        theta_0 = flight_data[index, 21] * m.pi / 180
-        qc_v_0 = (flight_data[index, 26] * c) / flight_data[index, 41]
-        initial_cond = np.array([[u_hat_0], [alpha_0], [theta_0], [qc_v_0]])
-
-        # Obtain impulse response
-        input_delta_e = flight_data[index:index + n_points, 16] * m.pi / 180
-        sys = ss_sym(rho=1.028, m=mass_event, theta_0=theta_0, v=tas_event)
-        t2, out, p2 = control.forced_response(sys, T=t1, U=input_delta_e)
-        if output == 1:
-            y2 = out[1, :] + initial_cond[1]  # Outputs: 0 - u / 1 - alpha / 2 - theta / 3 - q
-        elif output == 2:
-            y2 = out[2, :] + initial_cond[2]
-        elif output == 3:
-            y2 = out[3, :] * (flight_data[index, 41] / c) + initial_cond[3]
-
-        # IN DEBUGGING - DON'T TOUCH (currently looking at phugoid for reference data)
-        #plt.plot(t2, y2, label='System response')
-        #plt.plot(t1, y1, label='Reference data')
-        plt.plot(t2, input_delta_e, label='Elevator input')
-        plt.legend()
-        plt.xlabel('Reference data vs system response between ' + str(int(t_lookup)) + ' [s] and ' + str(
-            int(t_interval)) + ' [s] ' + motion + '.')
-        if output == 1:
-            plt.ylabel('Angle of attack \u03B1 [radians]')
-        elif output == 2:
-            plt.ylabel('Pitch angle \u03B8 [radians]')
-        elif output == 3:
-            plt.ylabel('Pitch rate q [radians/s]')
-        plt.show()
-    else:
-        #file_name = input("What is the .mat file name? (no extension, must be in this directory)")
-        plot_compare_flight(t_0, delta_t, motion_str, output, file_name='flight1_clean')
-    return
-
-
-def plot_compare_flight(t_0, delta_t, motion_str, output, file_name):
     # Flight data imported
-    import_file = file_name + '.mat'
-    mat = scipy.io.loadmat(import_file)
+    mat = scipy.io.loadmat('reference_clean.mat')
     flight_data = mat['clean_data']
 
-    # Define event (from flight test sheet)
-    t_lookup = t_0 - flight_data[0, 48]  # time (in seconds) at which event happens
-    t_limit = delta_t  # length of interval (in seconds, multiples of 0.1)
-    t_interval = t_lookup + t_limit
-    block_fuel = 2700  # block fuel (lbs)
-    passenger_weight = 771  # sum of passenger weight (kgs)
-    c = 2.0569
-    motion = '(' + motion_str + ')'
-
     # Get data location
-    index = int((t_lookup - flight_data[0, 48]) / 0.1)
+    index = int((t_lookup - flight_data[0, 47]) / 0.1)
     n_points = int(t_limit / 0.1) + 1
 
     # Obtain correct weight (manoeuvre start) and velocity, get system
-    used_fuel = flight_data[index, 14] + flight_data[index, 15]
+    used_fuel = flight_data[index, 13] + flight_data[index, 14]
     mass_event = (block_fuel - used_fuel + 9165) * 0.453592 + passenger_weight
-    # print(mass_event)
-    tas_event = flight_data[index, 42] * 0.514444
+    tas_event = flight_data[index, 41] * 0.514444
+
+    # Obtain correct rho
+    h_p = flight_data[index, 36] * 0.3048
+    p = 101325 * (1 + (-0.0065 * h_p / 288.15)) ** (-9.81 / (-0.0065 * 287.05))
+    T = flight_data[index, 34] + 273.15
+    rho = p / (287.05 * T)
 
     # Obtain correspondent flight data
     data_event = np.zeros((n_points, 2))
-    for i in range(n_points):
-        data_event[i, 0] = flight_data[index + i, 48] - flight_data[index, 48]
-        if output == 1:
-            column_index_data = 0
-        elif output == 2:
-            column_index_data = 22
-        elif output == 3:
-            column_index_data = 27
-        data_event[i, 1] = flight_data[
-            index + i, column_index_data]  # Outputs: ?? - u / 0 - alpha / 22 - theta / 27 - q
+    if output == 1:
+        for i in range(n_points):
+            data_event[i, 0] = flight_data[index + i, 47] - flight_data[index, 47]
+            data_event[i, 1] = flight_data[index + i, 0] - flight_data[index, 0]  # Output alpha
+    elif output == 2:
+        for i in range(n_points):
+            data_event[i, 0] = flight_data[index + i, 47] - flight_data[index, 47]
+            data_event[i, 1] = (flight_data[index + i, 21])  # Output theta
+    elif output == 3:
+        for i in range(n_points):
+            data_event[i, 0] = flight_data[index + i, 47] - flight_data[index, 47]
+            data_event[i, 1] = (flight_data[index + i, 26] * c) / flight_data[index, 41]  # Output q
     t1 = data_event[:, 0]
     y1 = data_event[:, 1] * m.pi / 180
 
     # Define initial conditions
     u_hat_0 = 0
-    alpha_0 = 0
-    theta_0 = flight_data[index, 22] * m.pi / 180
-    qc_v_0 = (flight_data[index, 27] * c) / flight_data[index, 42]
+    alpha_0 = 0  # flight_data[index, 0]
+    theta_0 = flight_data[index, 21] * m.pi / 180
+    qc_v_0 = (flight_data[index, 26] * c) / flight_data[index, 41]
     initial_cond = np.array([[u_hat_0], [alpha_0], [theta_0], [qc_v_0]])
 
     # Obtain impulse response
-    input_delta_e = flight_data[index:index + n_points, 17] * m.pi / 180
-    sys = ss_sym(rho=1.028, m=mass_event, theta_0=theta_0, v=tas_event)
+    input_delta_e = flight_data[index:index + n_points, 16] * m.pi / 180
+    sys = ss_sym(rho=rho, m=mass_event, theta_0=theta_0, v=tas_event, C_x_q=C_x_q, C_z_q=C_z_q, C_m_alpha=C_m_alpha,
+                 C_m_delta_e=C_m_delta_e,
+                 C_m_q=C_m_q)
     t2, out, p2 = control.forced_response(sys, T=t1, U=input_delta_e)
-    if output == 1:
-        y2 = out[1, :] + initial_cond[1]
-    elif output == 2:
-        y2 = out[2, :] + initial_cond[2]
-    elif output == 3:
-        y2 = out[3, :] * (flight_data[index, 42] / c) + initial_cond[3]
 
-    # Plot making
-    plt.plot(t2, y2, label='System response')
-    plt.plot(t1, y1, label='Reference data')
-    #plt.plot(t2, input_delta_e, label='Elevator input')
-    plt.legend()
-    plt.xlabel('Reference data vs system response between ' + str(int(t_lookup)) + ' [s] and ' + str(
-        int(t_interval)) + ' [s] ' + motion + '.')
+    y2 = out[output, :] + initial_cond[output]
+
+    return y1, y2, t1, t2, input_delta_e, t_lookup, t_interval
+
+
+def make_plot_sym(output=1, t_lookup=3717, t_limit=14, block_fuel=4050, passenger_weight=695, c=2.0569,
+                  C_x_q = -0.2817, C_z_q = -5.6629, C_m_alpha=-0.7249, C_m_delta_e=-1.4968, C_m_q=-8.7941):
+    y1, y2, t1, t2, input_delta_e, t_lookup, t_interval = num_model_sym_reference(output=output, t_lookup=t_lookup,
+                                                                                  t_limit=t_limit,
+                                                                                  block_fuel=block_fuel,
+                                                                                  passenger_weight=passenger_weight,
+                                                                                  c=c, C_x_q=C_x_q, C_z_q=C_z_q,
+                                                                                  C_m_alpha=C_m_alpha,
+                                                                                  C_m_delta_e=C_m_delta_e, C_m_q=C_m_q)
+
     if output == 1:
-        plt.ylabel('Angle of attack \u03B1 [radians]')
+        plt.plot(t1, y1, label=r'Reference data - $\alpha$')
+        plt.plot(t2, y2, label=r'System response - $\alpha$')
+        plt.legend()
+        plt.xlabel('Time [s]')
+        plt.ylabel('Angle of attack [deg]')
+        plt.title(
+            'Reference data vs system response between ' + str(t_lookup) + ' [s] and ' + str(t_interval) + ' [s].')
+        plt.show()
+
     elif output == 2:
-        plt.ylabel('Pitch angle \u03B8 [radians]')
+        plt.plot(t1, y1, label=r'Reference data - $\theta$')
+        plt.plot(t2, y2, label=r'System response - $\theta$')
+        plt.legend()
+        plt.xlabel('Time [s]')
+        plt.ylabel('Pitch angle [deg]')
+        plt.title(
+            'Reference data vs system response between ' + str(t_lookup) + ' [s] and ' + str(t_interval) + ' [s].')
+        plt.show()
+
     elif output == 3:
-        plt.ylabel('Pitch rate q [radians/s]')
-    plt.show()
+        plt.plot(t1, y1, label=r'Reference data - $q$')
+        plt.plot(t2, y2, label=r'System response - $q$')
+        plt.legend()
+        plt.xlabel('Time [s]')
+        plt.ylabel('Pitch rate [deg/s]')
+        plt.title(
+            'Reference data vs system response between ' + str(t_lookup) + ' [s] and ' + str(t_interval) + ' [s].')
+        plt.show()
+
+    elif output == 4:
+        plt.plot(t2, input_delta_e, label='Elevator input')
+        plt.legend()
+        plt.xlabel('Aileron and rudder input between ' + str(t_lookup) + ' [s] and ' + str(t_interval) + ' [s].')
+        plt.ylabel('Deflection [rad]')
+        plt.show()
+
     return
 
 
-run = True
-while run:
-    plot_compare()
-    repeat_status = int(input("Repeat? 1/0"))
-    if repeat_status:
-        run = True
-    else:
-        run = False
+#make_plot_sym(output=3,t_lookup=3229,t_limit=200)
+make_plot_sym(output=3, t_lookup=3229, t_limit=200, C_x_q=-13.193219977520021, C_z_q=-7.130847541981485, C_m_alpha=-0.21272996346475043, C_m_delta_e=-0.6919484170523861,C_m_q=-11.722501242413275)
