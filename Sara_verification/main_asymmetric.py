@@ -148,5 +148,3 @@ make_plot_asym(output=2, eigenmotion=motion, t_lookup=t_rn, t_limit=t_lim, CY_b=
                Cl_p=Cl_p)
 make_plot_asym(output=3, eigenmotion=motion, t_lookup=t_rn, t_limit=t_lim, CY_b=CY_b, Cn_r=Cn_r, Cn_p=Cn_p, Cl_r=Cl_r,
                Cl_p=Cl_p)
-make_plot_asym(output=0, eigenmotion=motion, t_lookup=t_rn, t_limit=t_lim, CY_b=CY_b, Cn_r=Cn_r, Cn_p=Cn_p, Cl_r=Cl_r,
-               Cl_p=Cl_p)
