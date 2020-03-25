@@ -150,10 +150,9 @@ def make_plot_sym_data(output=1, t_lookup=3717, t_limit=14, block_fuel=2700, pas
 
     return
 
-
 # t_rn = 3124.6
 # t_lim = 3.5
-#C_x_q, C_z_q, C_m_alpha, C_m_delta_e, C_m_q = -0.2817, -5.6629, -0.7249, -1.4968, -8.7941
+# C_x_q, C_z_q, C_m_alpha, C_m_delta_e, C_m_q = -0.2817, -5.6629, -0.7249, -1.4968, -8.7941
 # C_x_q, C_z_q, C_m_alpha, C_m_delta_e,C_m_q = -12.820571250633355, 0.0, -0.44894128027919294, -1.107547670556683, -8.614766207704937
 #
 # make_plot_sym_data(output=0, t_lookup=t_rn, t_limit=t_lim, C_x_q=C_x_q, C_z_q=C_z_q, C_m_alpha=C_m_alpha,
