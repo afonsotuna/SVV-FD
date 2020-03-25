@@ -7,7 +7,7 @@ import math as m
 
 
 def num_model_sym_reference(output=1, t_lookup=3717, t_limit=14, block_fuel=4050, passenger_weight=695, c=2.0569,
-                            C_m_alpha=-0.7249, C_m_delta_e=-1.4968, C_m_q=-8.7941):
+                            C_x_q=-0.2817, C_z_q=-5.6629, C_m_alpha=-0.7249, C_m_delta_e=-1.4968, C_m_q=-8.7941):
     # Outputs: 1 - alpha / 2 - theta / 3 - q
 
     t_interval = t_lookup + t_limit
@@ -36,7 +36,7 @@ def num_model_sym_reference(output=1, t_lookup=3717, t_limit=14, block_fuel=4050
     if output == 1:
         for i in range(n_points):
             data_event[i, 0] = flight_data[index + i, 47] - flight_data[index, 47]
-            data_event[i, 1] = (flight_data[index + i, 0]) - flight_data[index, 0]  # Output alpha
+            data_event[i, 1] = flight_data[index + i, 0] - flight_data[index, 0]  # Output alpha
     elif output == 2:
         for i in range(n_points):
             data_event[i, 0] = flight_data[index + i, 47] - flight_data[index, 47]
@@ -57,7 +57,8 @@ def num_model_sym_reference(output=1, t_lookup=3717, t_limit=14, block_fuel=4050
 
     # Obtain impulse response
     input_delta_e = flight_data[index:index + n_points, 16] * m.pi / 180
-    sys = ss_sym(rho=rho, m=mass_event, theta_0=theta_0, v=tas_event, C_m_alpha=C_m_alpha, C_m_delta_e=C_m_delta_e,
+    sys = ss_sym(rho=rho, m=mass_event, theta_0=theta_0, v=tas_event, C_x_q=C_x_q, C_z_q=C_z_q, C_m_alpha=C_m_alpha,
+                 C_m_delta_e=C_m_delta_e,
                  C_m_q=C_m_q)
     t2, out, p2 = control.forced_response(sys, T=t1, U=input_delta_e)
 
@@ -67,12 +68,13 @@ def num_model_sym_reference(output=1, t_lookup=3717, t_limit=14, block_fuel=4050
 
 
 def make_plot_sym(output=1, t_lookup=3717, t_limit=14, block_fuel=4050, passenger_weight=695, c=2.0569,
-                  C_m_alpha=-0.7249, C_m_delta_e=-1.4968, C_m_q=-8.7941):
+                  C_x_q = -0.2817, C_z_q = -5.6629, C_m_alpha=-0.7249, C_m_delta_e=-1.4968, C_m_q=-8.7941):
     y1, y2, t1, t2, input_delta_e, t_lookup, t_interval = num_model_sym_reference(output=output, t_lookup=t_lookup,
                                                                                   t_limit=t_limit,
                                                                                   block_fuel=block_fuel,
                                                                                   passenger_weight=passenger_weight,
-                                                                                  c=c, C_m_alpha=C_m_alpha,
+                                                                                  c=c, C_x_q=C_x_q, C_z_q=C_z_q,
+                                                                                  C_m_alpha=C_m_alpha,
                                                                                   C_m_delta_e=C_m_delta_e, C_m_q=C_m_q)
 
     if output == 1:
@@ -114,4 +116,6 @@ def make_plot_sym(output=1, t_lookup=3717, t_limit=14, block_fuel=4050, passenge
 
     return
 
-#make_plot_sym(output=3,t_lookup=3630,t_limit=40)
+
+#make_plot_sym(output=3,t_lookup=3229,t_limit=200)
+make_plot_sym(output=3, t_lookup=3229, t_limit=200, C_x_q=-13.193219977520021, C_z_q=-7.130847541981485, C_m_alpha=-0.21272996346475043, C_m_delta_e=-0.6919484170523861,C_m_q=-11.722501242413275)
