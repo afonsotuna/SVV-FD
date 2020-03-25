@@ -13,63 +13,71 @@ def num_model_asym_data(output=1, t_lookup=3717, t_limit=14, eigenmotion="dutch 
     t_interval = t_lookup + t_limit
 
     # Flight data imported
-    mat = scipy.io.loadmat('clean_flight_data.mat')
-    flight_data = mat['clean_data']
+    mat = scipy.io.loadmat('flight_actual.mat')
+    flight_data = mat['flightdata']
+    flight_data = flight_data[0, 0]
 
     # Get data location
-    index = int((t_lookup - flight_data[0, 48]) / 0.1)
+    index = int((t_lookup - flight_data['time'][0][0][0][0][0]) / 0.1)
     n_points = int(t_limit / 0.1) + 1
 
     # Obtain correct weight (manoeuvre start) and velocity, get system
-    used_fuel = flight_data[index, 14] + flight_data[index, 15]
+    used_fuel = flight_data['lh_engine_FU'][0][0][0][index] + flight_data['rh_engine_FU'][0][0][0][index]
     mass_event = (block_fuel - used_fuel + 9165) * 0.453592 + passenger_weight
-    tas_event = flight_data[index, 42] * 0.514444
+    tas_event = flight_data['Dadc1_tas'][0][0][0][index] * 0.514444
 
     # obtain correct rho
-    h_p = flight_data[index, 37] * 0.3048
+    h_p = flight_data['Dadc1_alt'][0][0][0][index] * 0.3048
     p = 101325 * (1 + (-0.0065 * h_p / 288.15)) ** (-9.81 / (-0.0065 * 287.05))
-    T = flight_data[index, 35] + 273.15
+    T = flight_data['Dadc1_sat'][0][0][0][index] + 273.15
     rho = p / (287.05 * T)
 
     # Obtain correspondent flight data
     data_event = np.zeros((n_points, 2))
     if output == 1:
         for i in range(n_points):
-            data_event[i, 0] = flight_data[index + i, 48] - flight_data[index, 48]
-            data_event[i, 1] = flight_data[index + i, 21]  # Output phi
+            data_event[i, 0] = flight_data['time'][0][0][0][0][index + i] - flight_data['time'][0][0][0][0][index]
+            data_event[i, 1] = flight_data['Ahrs1_Roll'][0][0][0][index + i]  # Output phi
     elif output == 2:
         for i in range(n_points):
-            data_event[i, 0] = flight_data[index + i, 48] - flight_data[index, 48]
-            data_event[i, 1] = flight_data[index + i, 26]  # Output pb/2V
+            data_event[i, 0] = flight_data['time'][0][0][0][0][index + i] - flight_data['time'][0][0][0][0][index]
+            data_event[i, 1] = flight_data['Ahrs1_bRollRate'][0][0][0][index + i]  # Output pb/2V
     elif output == 3:
         for i in range(n_points):
-            data_event[i, 0] = flight_data[index + i, 48] - flight_data[index, 48]
-            data_event[i, 1] = flight_data[index + i, 28]  # Output rb/2V
+            data_event[i, 0] = flight_data['time'][0][0][0][0][index + i] - flight_data['time'][0][0][0][0][index]
+            data_event[i, 1] = flight_data['Ahrs1_bYawRate'][0][0][0][index + i]  # Output rb/2V
     t1 = data_event[:, 0]
     y1 = data_event[:, 1] * m.pi / 180
 
     if eigenmotion == "dutch roll":
-        input_delta_a = flight_data[index:index + n_points, 16] * m.pi / 180 - flight_data[
-            index + n_points, 16] * m.pi / 180
-        input_delta_r = -flight_data[index:index + n_points, 18] * m.pi / 180
+        input_delta_a = (flight_data['delta_a'][0][0][0][index:index + n_points] * m.pi / 180 -
+                         flight_data['delta_a'][0][0][0][index + n_points] * m.pi / 180)
+        input_delta_r = -flight_data['delta_r'][0][0][0][index:index + n_points] * m.pi / 180
 
     if eigenmotion == "aperiodic":
-        input_delta_a = -(flight_data[index:index + n_points, 16] * m.pi / 180 - flight_data[index, 16] * m.pi / 180)
-        input_delta_r = -flight_data[index:index + n_points, 18] * m.pi / 180 * 0
+        input_delta_a = -(flight_data['delta_a'][0][0][0][index:index + n_points] * m.pi / 180 -
+                          flight_data['delta_a'][0][0][0][index + n_points] * m.pi / 180)
+        input_delta_r = -flight_data['delta_r'][0][0][0][index:index + n_points] * m.pi / 180
 
     if eigenmotion == "spiral":
-        input_delta_a = -(flight_data[index:index + n_points, 16] * m.pi / 180 - flight_data[
-            index + n_points, 16] * m.pi / 180)
-        input_delta_r = -(flight_data[index:index + n_points, 18] * m.pi / 180 - flight_data[
-            index + n_points, 18] * m.pi / 180)
+        input_delta_a = -(flight_data['delta_a'][0][0][0][index:index + n_points] * m.pi / 180 -
+                          flight_data['delta_a'][0][0][0][index + n_points] * m.pi / 180)
+        input_delta_r = -(flight_data['delta_r'][0][0][0][index:index + n_points] * m.pi / 180 -
+                          flight_data['delta_r'][0][0][0][index + n_points] * m.pi / 180)
 
-    input_tot = np.array([input_delta_a, input_delta_r])
+    input_tot = np.array([input_delta_a[:, 0], input_delta_r[:, 0]])
 
-    sys = ss_asym(rho=rho, m=mass_event, theta_0=flight_data[index, 21] * m.pi / 180, v=tas_event, CY_b=CY_b, Cn_r=Cn_r,
+    sys = ss_asym(rho=rho, m=mass_event, theta_0=flight_data['Ahrs1_Pitch'][0][0][0][index] * m.pi / 180, v=tas_event,
+                  CY_b=CY_b, Cn_r=Cn_r,
                   Cn_p=Cn_p, Cl_r=Cl_r, Cl_p=Cl_p)
-    t2, out, p2 = control.forced_response(sys, T=t1, U=input_tot, X0=[0., flight_data[index, 21] * m.pi / 180,
-                                                                      flight_data[index, 26] * m.pi / 180,
-                                                                      flight_data[index, 28] * m.pi / 180])
+    # t2, out, p2 = control.forced_response(sys, T=t1, U=input_tot,X0=[0., -flight_data['Ahrs1_Roll'][0][0][0][index][0]* m.pi / 180,  -flight_data['Ahrs1_bRollRate'][0][0][0][index][0]* m.pi / 180, -flight_data['Ahrs1_bYawRate'][0][0][0][index][0]* m.pi / 180])
+    t2, out, p2 = control.forced_response(sys, T=t1, U=input_tot,
+                                          X0=[0., flight_data['Ahrs1_Roll'][0][0][0][index][0] * m.pi / 180,
+                                              flight_data['Ahrs1_bRollRate'][0][0][0][index][0] * m.pi / 180,
+                                              flight_data['Ahrs1_bYawRate'][0][0][0][index][0] * m.pi / 180])
+
+    if eigenmotion == "dutch roll":
+        out = out
 
     y2 = out[output, :]  # Outputs: 1 - phi / 2 - pb/2V / 3 - rb/2V
 
@@ -129,7 +137,17 @@ def make_plot_asym(output=1, eigenmotion="dutch roll", t_lookup=3717, t_limit=14
 
     return
 
-# make_plot_asym(output=1, eigenmotion = "spiral", t_lookup=3900, t_limit=120, CY_b=-2.5246936822596595,Cn_r=0, Cn_p=0.0, Cl_r=0.09370939257487754, Cl_p=-0.816106143365501)
-make_plot_asym(output=1, eigenmotion = "aperiodic", t_lookup=3050, t_limit=20, CY_b = -2.560698700667486, Cn_r = 0.0, Cn_p = 0.0, Cl_r = 0.09170271668625395, Cl_p = -0.7930823749878441)
-make_plot_asym(output=2, eigenmotion = "aperiodic", t_lookup=3050, t_limit=20, CY_b = -2.560698700667486, Cn_r = 0.0, Cn_p = 0.0, Cl_r = 0.09170271668625395, Cl_p = -0.7930823749878441)
-make_plot_asym(output=3, eigenmotion = "aperiodic", t_lookup=3050, t_limit=20, CY_b = -2.560698700667486, Cn_r = 0.0, Cn_p = 0.0, Cl_r = 0.09170271668625395, Cl_p = -0.7930823749878441)
+
+t_rn = 3050
+t_lim = 20
+motion = "aperiodic"
+
+CY_b, Cn_r, Cn_p, Cl_r, Cl_p = -0.7500, -0.2061, -0.0602, 0.2376, -0.7108
+# CY_b, Cn_r, Cn_p, Cl_r, Cl_p = -2.560698700667486, 0.0, 0.0, 0.09170271668625395, -0.7930823749878441
+
+make_plot_asym(output=1, eigenmotion=motion, t_lookup=t_rn, t_limit=t_lim, CY_b=CY_b, Cn_r=Cn_r, Cn_p=Cn_p, Cl_r=Cl_r,
+               Cl_p=Cl_p)
+make_plot_asym(output=2, eigenmotion=motion, t_lookup=t_rn, t_limit=t_lim, CY_b=CY_b, Cn_r=Cn_r, Cn_p=Cn_p, Cl_r=Cl_r,
+               Cl_p=Cl_p)
+make_plot_asym(output=3, eigenmotion=motion, t_lookup=t_rn, t_limit=t_lim, CY_b=CY_b, Cn_r=Cn_r, Cn_p=Cn_p, Cl_r=Cl_r,
+               Cl_p=Cl_p)
