@@ -67,7 +67,7 @@ def num_model_asym_reference(output=1, t_lookup=3717, t_limit=14, eigenmotion="d
 
     sys = ss_asym(rho=rho, m=mass_event, theta_0=flight_data[index, 21] * m.pi / 180, v=tas_event, CY_b=CY_b, Cn_r=Cn_r,
                   Cn_p=Cn_p, Cl_r=Cl_r, Cl_p=Cl_p)
-    t2, out = control.impulse_response(sys, T=t1)
+    t2, out = control.impulse_response(sys, T=t1, input=1)
 
     y2 = out[output, :]  # Outputs: 1 - phi / 2 - pb/2V / 3 - rb/2V
 
@@ -93,8 +93,7 @@ def make_plot_asym(output=1, eigenmotion="dutch roll", t_lookup=3717, t_limit=14
         plt.legend()
         plt.xlabel('Time [s]')
         plt.ylabel('Roll angle [rad]')
-        plt.title(
-            'Reference data vs system response between ' + str(t_lookup) + ' [s] and ' + str(t_interval) + ' [s].')
+        #plt.title('Reference data vs system response between ' + str(t_lookup) + ' [s] and ' + str(t_interval) + ' [s].')
         plt.show()
 
     elif output == 2:
@@ -103,8 +102,8 @@ def make_plot_asym(output=1, eigenmotion="dutch roll", t_lookup=3717, t_limit=14
         plt.legend()
         plt.xlabel('Time [s]')
         plt.ylabel('Roll rate [rad/s]')
-        plt.title(
-            'Reference data vs system response between ' + str(t_lookup) + ' [s] and ' + str(t_interval) + ' [s].')
+        #plt.title(
+        #    'Reference data vs system response between ' + str(t_lookup) + ' [s] and ' + str(t_interval) + ' [s].')
         plt.show()
 
     elif output == 3:
@@ -113,8 +112,8 @@ def make_plot_asym(output=1, eigenmotion="dutch roll", t_lookup=3717, t_limit=14
         plt.legend()
         plt.xlabel('Time [s]')
         plt.ylabel('Yaw rate [rad/s]')
-        plt.title(
-            'Reference data vs system response between ' + str(t_lookup) + ' [s] and ' + str(t_interval) + ' [s].')
+        #plt.title(
+        #   'Reference data vs system response between ' + str(t_lookup) + ' [s] and ' + str(t_interval) + ' [s].')
         plt.show()
 
     elif output == 4:
