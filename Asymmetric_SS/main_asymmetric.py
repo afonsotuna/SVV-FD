@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import control
 import scipy.io
 import numpy as np
-from Asymmetric_SS.ss_asymmetric import ss_asym
+from ss_asymmetric import ss_asym
 import math as m
 
 
@@ -130,4 +130,6 @@ def make_plot_asym(output=1, eigenmotion="dutch roll", t_lookup=3717, t_limit=14
     return
 
 # make_plot_asym(output=1, eigenmotion = "spiral", t_lookup=3900, t_limit=120, CY_b=-2.5246936822596595,Cn_r=0, Cn_p=0.0, Cl_r=0.09370939257487754, Cl_p=-0.816106143365501)
-#make_plot_asym(output=3, eigenmotion = "spiral", t_lookup=3590, t_limit=120)
+make_plot_asym(output=1, eigenmotion = "aperiodic", t_lookup=3050, t_limit=20, CY_b = -2.560698700667486, Cn_r = 0.0, Cn_p = 0.0, Cl_r = 0.09170271668625395, Cl_p = -0.7930823749878441)
+make_plot_asym(output=2, eigenmotion = "aperiodic", t_lookup=3050, t_limit=20, CY_b = -2.560698700667486, Cn_r = 0.0, Cn_p = 0.0, Cl_r = 0.09170271668625395, Cl_p = -0.7930823749878441)
+make_plot_asym(output=3, eigenmotion = "aperiodic", t_lookup=3050, t_limit=20, CY_b = -2.560698700667486, Cn_r = 0.0, Cn_p = 0.0, Cl_r = 0.09170271668625395, Cl_p = -0.7930823749878441)
