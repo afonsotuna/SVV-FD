@@ -72,7 +72,8 @@ def error_minimize_asym(x_bounds):
 
 x_bounds = [[-5, 0], [-5, 0], [-5, 0], [0, 5], [-5, 0]]
 
-print(error_minimize_asym(x_bounds))
+# print(error_minimize_asym(x_bounds))
 
 # pars= np.array(([-2.662089857595346], [0.0], [0.0], [0.07580034708397379], [-0.7020261870931681]))
+# pars = np.array(([-0.7500], [-0.2061], [-0.0602], [0.2376], [-0.7108]))
 # error_function_asym(pars)
