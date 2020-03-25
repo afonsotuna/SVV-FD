@@ -56,12 +56,12 @@ def num_model_sym_data(output=1, t_lookup=3717, t_limit=14, block_fuel=2700, pas
     initial_cond = np.array([[u_hat_0], [alpha_0], [theta_0], [qc_v_0]])
 
     # Obtain impulse response
-    input_delta_e = flight_data[index:index + n_points, 16] * m.pi / 180
+    input_delta_e = -flight_data[index:index + n_points, 16] * m.pi / 180
     sys = ss_sym(rho=rho, m=mass_event, theta_0=theta_0, v=tas_event, C_x_q=C_x_q, C_z_q=C_z_q, C_m_alpha=C_m_alpha,
                  C_m_delta_e=C_m_delta_e, C_m_q=C_m_q)
     t2, out, p2 = control.forced_response(sys, T=t1, U=input_delta_e)
 
-    y2 = out[output, :] + initial_cond[output]
+    y2 = out[output, :]
 
     return y1, y2, t1, t2, input_delta_e, t_lookup, t_interval
 
@@ -115,5 +115,10 @@ def make_plot_sym_data(output=1, t_lookup=3717, t_limit=14, block_fuel=2700, pas
 
     return
 
-# make_plot_sym_data(output=3,t_lookup=3126,t_limit=40)
+# t_rn = 3125
+# t_lim = 30
+#
+# make_plot_sym_data(output=1,t_lookup=t_rn,t_limit=t_lim)
+# make_plot_sym_data(output=2,t_lookup=t_rn,t_limit=t_lim)
+# make_plot_sym_data(output=3,t_lookup=t_rn,t_limit=t_lim)
 # make_plot_sym(output=3, t_lookup=3229, t_limit=200, C_x_q=-13.193219977520021, C_z_q=-7.130847541981485, C_m_alpha=-0.21272996346475043, C_m_delta_e=-0.6919484170523861,C_m_q=-11.722501242413275)

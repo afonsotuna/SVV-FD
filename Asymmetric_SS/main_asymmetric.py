@@ -130,4 +130,4 @@ def make_plot_asym(output=1, eigenmotion="dutch roll", t_lookup=3717, t_limit=14
     return
 
 # make_plot_asym(output=1, eigenmotion = "spiral", t_lookup=3900, t_limit=120, CY_b=-2.5246936822596595,Cn_r=0, Cn_p=0.0, Cl_r=0.09370939257487754, Cl_p=-0.816106143365501)
-make_plot_asym(output=3, eigenmotion = "spiral", t_lookup=3590, t_limit=120)
+#make_plot_asym(output=3, eigenmotion = "spiral", t_lookup=3590, t_limit=120)
