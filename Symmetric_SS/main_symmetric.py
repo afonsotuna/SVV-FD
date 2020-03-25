@@ -98,43 +98,47 @@ def make_plot_sym_data(output=1, t_lookup=3717, t_limit=14, block_fuel=2700, pas
                                                                              C_m_delta_e=C_m_delta_e, C_m_q=C_m_q)
 
     if output == 0:
-        plt.plot(t1, y1, label=r'Reference data - $u$')
+        plt.plot(t1, y1, label=r'Flight data - $u$')
         plt.plot(t2, y2, label=r'System response - $u$')
         plt.legend()
         plt.xlabel('Time [s]')
         plt.ylabel('Velocity [m/s]')
         plt.title(
-            'Reference data vs system response between ' + str(t_lookup) + ' [s] and ' + str(t_interval) + ' [s].')
+            'Flight data vs system response between ' + str(t_lookup) + ' [s] and ' + str(t_interval) + ' [s].')
+        plt.savefig('Short_Period/u_shortP_data.png')
         plt.show()
 
     if output == 1:
-        plt.plot(t1, y1, label=r'Reference data - $\alpha$')
+        plt.plot(t1, y1, label=r'Flight data - $\alpha$')
         plt.plot(t2, y2, label=r'System response - $\alpha$')
         plt.legend()
         plt.xlabel('Time [s]')
         plt.ylabel('Angle of attack [rad]')
         plt.title(
-            'Reference data vs system response between ' + str(t_lookup) + ' [s] and ' + str(t_interval) + ' [s].')
+            'Flight data vs system response between ' + str(t_lookup) + ' [s] and ' + str(t_interval) + ' [s].')
+        plt.savefig('Short_Period/alpha_shortP_data.png')
         plt.show()
 
     elif output == 2:
-        plt.plot(t1, y1, label=r'Reference data - $\theta$')
+        plt.plot(t1, y1, label=r'Flight data - $\theta$')
         plt.plot(t2, y2, label=r'System response - $\theta$')
         plt.legend()
         plt.xlabel('Time [s]')
         plt.ylabel('Pitch angle [rad]')
         plt.title(
-            'Reference data vs system response between ' + str(t_lookup) + ' [s] and ' + str(t_interval) + ' [s].')
+            'Flight data vs system response between ' + str(t_lookup) + ' [s] and ' + str(t_interval) + ' [s].')
+        plt.savefig('Short_Period/theta_shortP_data.png')
         plt.show()
 
     elif output == 3:
-        plt.plot(t1, y1, label=r'Reference data - $q$')
+        plt.plot(t1, y1, label=r'Flight data - $q$')
         plt.plot(t2, y2, label=r'System response - $q$')
         plt.legend()
         plt.xlabel('Time [s]')
         plt.ylabel('Pitch rate [rad/s]')
         plt.title(
-            'Reference data vs system response between ' + str(t_lookup) + ' [s] and ' + str(t_interval) + ' [s].')
+            'Flight data vs system response between ' + str(t_lookup) + ' [s] and ' + str(t_interval) + ' [s].')
+        plt.savefig('Short_Period/q_shortP_data.png')
         plt.show()
 
         # elif output == 4:
@@ -147,25 +151,25 @@ def make_plot_sym_data(output=1, t_lookup=3717, t_limit=14, block_fuel=2700, pas
     return
 
 
-t_rn = 3124.6
-t_lim = 3.5
+# t_rn = 3124.6
+# t_lim = 3.5
 #C_x_q, C_z_q, C_m_alpha, C_m_delta_e, C_m_q = -0.2817, -5.6629, -0.7249, -1.4968, -8.7941
-C_x_q, C_z_q, C_m_alpha, C_m_delta_e,C_m_q = -12.820571250633355, 0.0, -0.44894128027919294, -1.107547670556683, -8.614766207704937
+# C_x_q, C_z_q, C_m_alpha, C_m_delta_e,C_m_q = -12.820571250633355, 0.0, -0.44894128027919294, -1.107547670556683, -8.614766207704937
+#
+# make_plot_sym_data(output=0, t_lookup=t_rn, t_limit=t_lim, C_x_q=C_x_q, C_z_q=C_z_q, C_m_alpha=C_m_alpha,
+#                    C_m_delta_e=C_m_delta_e, C_m_q=C_m_q)
+# make_plot_sym_data(output=1, t_lookup=t_rn, t_limit=t_lim, C_x_q=C_x_q, C_z_q=C_z_q, C_m_alpha=C_m_alpha,
+#                    C_m_delta_e=C_m_delta_e, C_m_q=C_m_q)
+# make_plot_sym_data(output=2, t_lookup=t_rn, t_limit=t_lim, C_x_q=C_x_q, C_z_q=C_z_q, C_m_alpha=C_m_alpha,
+#                    C_m_delta_e=C_m_delta_e, C_m_q=C_m_q)
+# make_plot_sym_data(output=3, t_lookup=t_rn, t_limit=t_lim, C_x_q=C_x_q, C_z_q=C_z_q, C_m_alpha=C_m_alpha, C_m_delta_e=C_m_delta_e, C_m_q=C_m_q)
 
-make_plot_sym_data(output=0, t_lookup=t_rn, t_limit=t_lim, C_x_q=C_x_q, C_z_q=C_z_q, C_m_alpha=C_m_alpha,
-                   C_m_delta_e=C_m_delta_e, C_m_q=C_m_q)
-make_plot_sym_data(output=1, t_lookup=t_rn, t_limit=t_lim, C_x_q=C_x_q, C_z_q=C_z_q, C_m_alpha=C_m_alpha,
-                   C_m_delta_e=C_m_delta_e, C_m_q=C_m_q)
-make_plot_sym_data(output=2, t_lookup=t_rn, t_limit=t_lim, C_x_q=C_x_q, C_z_q=C_z_q, C_m_alpha=C_m_alpha,
-                   C_m_delta_e=C_m_delta_e, C_m_q=C_m_q)
-make_plot_sym_data(output=3, t_lookup=t_rn, t_limit=t_lim, C_x_q=C_x_q, C_z_q=C_z_q, C_m_alpha=C_m_alpha, C_m_delta_e=C_m_delta_e, C_m_q=C_m_q)
-
-t_rn = 3219
-t_lim = 170
-make_plot_sym_data(output=0, t_lookup=t_rn, t_limit=t_lim, C_x_q=C_x_q, C_z_q=C_z_q, C_m_alpha=C_m_alpha,
-                   C_m_delta_e=C_m_delta_e, C_m_q=C_m_q)
-make_plot_sym_data(output=1, t_lookup=t_rn, t_limit=t_lim, C_x_q=C_x_q, C_z_q=C_z_q, C_m_alpha=C_m_alpha,
-                   C_m_delta_e=C_m_delta_e, C_m_q=C_m_q)
-make_plot_sym_data(output=2, t_lookup=t_rn, t_limit=t_lim, C_x_q=C_x_q, C_z_q=C_z_q, C_m_alpha=C_m_alpha,
-                   C_m_delta_e=C_m_delta_e, C_m_q=C_m_q)
-make_plot_sym_data(output=3, t_lookup=t_rn, t_limit=t_lim, C_x_q=C_x_q, C_z_q=C_z_q, C_m_alpha=C_m_alpha, C_m_delta_e=C_m_delta_e, C_m_q=C_m_q)
+# t_rn = 3219
+# t_lim = 170
+# make_plot_sym_data(output=0, t_lookup=t_rn, t_limit=t_lim, C_x_q=C_x_q, C_z_q=C_z_q, C_m_alpha=C_m_alpha,
+#                    C_m_delta_e=C_m_delta_e, C_m_q=C_m_q)
+# make_plot_sym_data(output=1, t_lookup=t_rn, t_limit=t_lim, C_x_q=C_x_q, C_z_q=C_z_q, C_m_alpha=C_m_alpha,
+#                    C_m_delta_e=C_m_delta_e, C_m_q=C_m_q)
+# make_plot_sym_data(output=2, t_lookup=t_rn, t_limit=t_lim, C_x_q=C_x_q, C_z_q=C_z_q, C_m_alpha=C_m_alpha,
+#                    C_m_delta_e=C_m_delta_e, C_m_q=C_m_q)
+# make_plot_sym_data(output=3, t_lookup=t_rn, t_limit=t_lim, C_x_q=C_x_q, C_z_q=C_z_q, C_m_alpha=C_m_alpha, C_m_delta_e=C_m_delta_e, C_m_q=C_m_q)
