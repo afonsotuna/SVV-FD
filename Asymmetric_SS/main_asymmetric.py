@@ -51,15 +51,15 @@ def num_model_asym_data(output=1, t_lookup=3717, t_limit=14, eigenmotion="dutch 
     if eigenmotion == "dutch roll":
         input_delta_a = flight_data[index:index + n_points, 16] * m.pi / 180 - flight_data[
             index + n_points, 16] * m.pi / 180
-        input_delta_r = flight_data[index:index + n_points, 18] * m.pi / 180
+        input_delta_r = -flight_data[index:index + n_points, 18] * m.pi / 180
 
     if eigenmotion == "aperiodic":
-        input_delta_a = flight_data[index:index + n_points, 16] * m.pi / 180 - flight_data[index, 16] * m.pi / 180
-        input_delta_r = flight_data[index:index + n_points, 18] * m.pi / 180 * 0
+        input_delta_a = -(flight_data[index:index + n_points, 16] * m.pi / 180 - flight_data[index, 16] * m.pi / 180)
+        input_delta_r = -flight_data[index:index + n_points, 18] * m.pi / 180 * 0
 
     if eigenmotion == "spiral":
-        input_delta_a = flight_data[index:index + n_points, 16] * m.pi / 180 - flight_data[
-            index + n_points, 16] * m.pi / 180
+        input_delta_a = -(flight_data[index:index + n_points, 16] * m.pi / 180 - flight_data[
+            index + n_points, 16] * m.pi / 180)
         input_delta_r = -(flight_data[index:index + n_points, 18] * m.pi / 180 - flight_data[
             index + n_points, 18] * m.pi / 180)
 
@@ -70,9 +70,6 @@ def num_model_asym_data(output=1, t_lookup=3717, t_limit=14, eigenmotion="dutch 
     t2, out, p2 = control.forced_response(sys, T=t1, U=input_tot, X0=[0., flight_data[index, 21] * m.pi / 180,
                                                                       flight_data[index, 26] * m.pi / 180,
                                                                       flight_data[index, 28] * m.pi / 180])
-
-    if eigenmotion == "dutch roll":
-        out = -out
 
     y2 = out[output, :]  # Outputs: 1 - phi / 2 - pb/2V / 3 - rb/2V
 
@@ -133,4 +130,4 @@ def make_plot_asym(output=1, eigenmotion="dutch roll", t_lookup=3717, t_limit=14
     return
 
 # make_plot_asym(output=1, eigenmotion = "spiral", t_lookup=3900, t_limit=120, CY_b=-2.5246936822596595,Cn_r=0, Cn_p=0.0, Cl_r=0.09370939257487754, Cl_p=-0.816106143365501)
-# make_plot_asym(output=3, eigenmotion = "spiral", t_lookup=3590, t_limit=120)
+make_plot_asym(output=3, eigenmotion = "spiral", t_lookup=3590, t_limit=120)
