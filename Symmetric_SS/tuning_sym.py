@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 from scipy.optimize import minimize
 import numpy as np
-from Symmetric_SS.main_symmetric import num_model_sym_reference
+from Symmetric_SS.main_symmetric_ref import num_model_sym_reference
 
 
 def error_def(y1, y2):
