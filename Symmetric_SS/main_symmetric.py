@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import control
 import scipy.io
 import numpy as np
-from Symmetric_SS_MATLAB.ss_symmetric import ss_sym
+from Symmetric_SS.ss_symmetric import ss_sym
 import math as m
 
 
@@ -117,5 +117,5 @@ def make_plot_sym(output=1, t_lookup=3717, t_limit=14, block_fuel=4050, passenge
     return
 
 
-#make_plot_sym(output=3,t_lookup=3229,t_limit=200)
-make_plot_sym(output=3, t_lookup=3229, t_limit=200, C_x_q=-13.193219977520021, C_z_q=-7.130847541981485, C_m_alpha=-0.21272996346475043, C_m_delta_e=-0.6919484170523861,C_m_q=-11.722501242413275)
+#make_plot_sym(output=3,t_lookup=3630,t_limit=40)
+#make_plot_sym(output=3, t_lookup=3229, t_limit=200, C_x_q=-13.193219977520021, C_z_q=-7.130847541981485, C_m_alpha=-0.21272996346475043, C_m_delta_e=-0.6919484170523861,C_m_q=-11.722501242413275)
