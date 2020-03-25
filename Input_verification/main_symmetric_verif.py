@@ -83,8 +83,8 @@ def make_plot_sym_ref(output=1, t_lookup=3717, t_limit=14, block_fuel=2700, pass
         plt.legend()
         plt.xlabel('Time [s]')
         plt.ylabel('Angle of attack [deg]')
-        plt.title(
-            'Reference data vs system response between ' + str(t_lookup) + ' [s] and ' + str(t_interval) + ' [s].')
+        #plt.title(
+        #    'Reference data vs system response between ' + str(t_lookup) + ' [s] and ' + str(t_interval) + ' [s].')
         plt.show()
 
     elif output == 2:
@@ -93,8 +93,8 @@ def make_plot_sym_ref(output=1, t_lookup=3717, t_limit=14, block_fuel=2700, pass
         plt.legend()
         plt.xlabel('Time [s]')
         plt.ylabel('Pitch angle [deg]')
-        plt.title(
-            'Reference data vs system response between ' + str(t_lookup) + ' [s] and ' + str(t_interval) + ' [s].')
+        #plt.title(
+        #   'Reference data vs system response between ' + str(t_lookup) + ' [s] and ' + str(t_interval) + ' [s].')
         plt.show()
 
     elif output == 3:
@@ -103,8 +103,8 @@ def make_plot_sym_ref(output=1, t_lookup=3717, t_limit=14, block_fuel=2700, pass
         plt.legend()
         plt.xlabel('Time [s]')
         plt.ylabel('Pitch rate [deg/s]')
-        plt.title(
-            'Reference data vs system response between ' + str(t_lookup) + ' [s] and ' + str(t_interval) + ' [s].')
+        #plt.title(
+        #    'Reference data vs system response between ' + str(t_lookup) + ' [s] and ' + str(t_interval) + ' [s].')
         plt.show()
 
     elif output == 4:

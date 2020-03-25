@@ -95,7 +95,7 @@ def make_plot_asym(output=1, eigenmotion="dutch roll", t_lookup=3717, t_limit=14
                                                                                              Cl_r=Cl_r, Cl_p=Cl_p)
 
     if output == 1:
-        plt.plot(t1, y1, label=r'Reference data - $\phi$')
+        #plt.plot(t1, y1, label=r'Reference data - $\phi$')
         plt.plot(t2, y2, label=r'System response - $\phi$')
         plt.legend()
         plt.xlabel('Time [s]')
@@ -105,7 +105,7 @@ def make_plot_asym(output=1, eigenmotion="dutch roll", t_lookup=3717, t_limit=14
         plt.show()
 
     elif output == 2:
-        plt.plot(t1, y1, label=r'Reference data - $p$')
+        #plt.plot(t1, y1, label=r'Reference data - $p$')
         plt.plot(t2, y2, label=r'System response - $p$')
         plt.legend()
         plt.xlabel('Time [s]')
@@ -115,7 +115,7 @@ def make_plot_asym(output=1, eigenmotion="dutch roll", t_lookup=3717, t_limit=14
         plt.show()
 
     elif output == 3:
-        plt.plot(t1, y1, label=r'Reference data - $r$')
+        #plt.plot(t1, y1, label=r'Reference data - $r$')
         plt.plot(t2, y2, label=r'System response - $r$')
         plt.legend()
         plt.xlabel('Time [s]')
@@ -147,4 +147,6 @@ make_plot_asym(output=1, eigenmotion=motion, t_lookup=t_rn, t_limit=t_lim, CY_b=
 make_plot_asym(output=2, eigenmotion=motion, t_lookup=t_rn, t_limit=t_lim, CY_b=CY_b, Cn_r=Cn_r, Cn_p=Cn_p, Cl_r=Cl_r,
                Cl_p=Cl_p)
 make_plot_asym(output=3, eigenmotion=motion, t_lookup=t_rn, t_limit=t_lim, CY_b=CY_b, Cn_r=Cn_r, Cn_p=Cn_p, Cl_r=Cl_r,
+               Cl_p=Cl_p)
+make_plot_asym(output=0, eigenmotion=motion, t_lookup=t_rn, t_limit=t_lim, CY_b=CY_b, Cn_r=Cn_r, Cn_p=Cn_p, Cl_r=Cl_r,
                Cl_p=Cl_p)

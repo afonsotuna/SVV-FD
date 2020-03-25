@@ -44,6 +44,16 @@ def ss_asym(rho=1.225, theta_0=0, m=4157.174, v=80, CY_b=-0.7500, Cn_r=-0.2061, 
     # other parameters only required in asym  matrix
     C_L = (W * np.cos(theta_0)) / (0.5 * rho * v ** 2 * S)  # component of weight along the Zs axis
 
+    C_L = 0
+    CY_p = 0
+    Cl_p = -Cn_p * K_xx**2 / K_xz
+    Cl_b = -Cn_b * K_xz / K_zz**2
+    Cl_r = -Cn_r * K_xz / K_zz**2
+    Cl_sa = -Cn_sa * K_xx**2 / K_xz
+    Cl_sr = -Cn_sr * K_xz / K_zz**2
+    CY_sa = 0
+
+
     # BUILDING MATRICES
 
     P = np.zeros((4, 4))
