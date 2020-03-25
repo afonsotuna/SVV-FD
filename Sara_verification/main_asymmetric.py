@@ -46,6 +46,10 @@ def num_model_asym_data(output=1, t_lookup=3717, t_limit=14, eigenmotion="dutch 
         for i in range(n_points):
             data_event[i, 0] = flight_data['time'][0][0][0][0][index + i] - flight_data['time'][0][0][0][0][index]
             data_event[i, 1] = flight_data['Ahrs1_bYawRate'][0][0][0][index + i]  # Output rb/2V
+    elif output == 0:
+        for i in range(n_points):
+            data_event[i, 0] = 0
+            data_event[i, 1] = 0
     t1 = data_event[:, 0]
     y1 = data_event[:, 1] * m.pi / 180
 
@@ -94,7 +98,17 @@ def make_plot_asym(output=1, eigenmotion="dutch roll", t_lookup=3717, t_limit=14
                                                                                              Cn_r=Cn_r, Cn_p=Cn_p,
                                                                                              Cl_r=Cl_r, Cl_p=Cl_p)
 
-    if output == 1:
+    if output == 0:
+        #plt.plot(t1, y1, label=r'Reference data - $\phi$')
+        plt.plot(t2, y2, label=r'System response - $\phi$')
+        plt.legend()
+        plt.xlabel('Time [s]')
+        plt.ylabel('Roll angle [rad]')
+        plt.title(
+            'Reference data vs system response between ' + str(t_lookup) + ' [s] and ' + str(t_interval) + ' [s].')
+        plt.show()
+
+    elif output == 1:
         #plt.plot(t1, y1, label=r'Reference data - $\phi$')
         plt.plot(t2, y2, label=r'System response - $\phi$')
         plt.legend()
@@ -150,3 +164,6 @@ make_plot_asym(output=3, eigenmotion=motion, t_lookup=t_rn, t_limit=t_lim, CY_b=
                Cl_p=Cl_p)
 make_plot_asym(output=0, eigenmotion=motion, t_lookup=t_rn, t_limit=t_lim, CY_b=CY_b, Cn_r=Cn_r, Cn_p=Cn_p, Cl_r=Cl_r,
                Cl_p=Cl_p)
+
+y1, y2, t1, t2, input_delta_a, input_delta_r, t_lookup, t_interval = num_model_asym_data(output=0)
+print(y2)
