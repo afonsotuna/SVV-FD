@@ -61,7 +61,7 @@ def CL_curve (ref, data=None, plot=0):  ## Use ref = 1 for ref data, any other n
         ylist = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2]
         plt.yticks(np.arange(0,1.3,0.1), labels=ylist)
         plt.scatter(aoa, C_L, s=70, c='r', marker='x', label='Calculated C$_L$ values')
-        plt.plot(x1, y1, 'darkturquoise', label='Line of best fit')
+        plt.plot(x1, y1, 'darkturquoise', label='Least-squares fit')
         plt.grid()
         plt.legend(loc='best')
         if ref == 1:
@@ -79,4 +79,4 @@ def CL_curve (ref, data=None, plot=0):  ## Use ref = 1 for ref data, any other n
 
     return(gradient*(180/np.pi), aoa, C_L)
 
-CL_curve(1, plot=1)
+CL_curve(0, plot=1)

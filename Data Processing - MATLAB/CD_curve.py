@@ -23,10 +23,10 @@ def CD_curve (ref, data=None, datathr=None, plot=0):
 
     if ref == 1 and data is None:
         exc_data = 'Post_Flight_Datasheet_Flight_1_DD_12_3_2018.xlsx'
-        f = open('thr_CLCD_ref.dat')
+        f = open('thrust_dats/thr_CLCD_ref.dat')
     elif data is None:
         exc_data = 'C:/Users/nano2598\Documents/actual college ugh/Third year/SVV-FD/Data_repo/20200311_V4.xlsx'
-        f = open('thr_CLCD_ours.dat', 'r')
+        f = open('thrust_dats/thr_CLCD_ours.dat', 'r')
     else:
         exc_data = data
         f = open(datathr, 'r')
@@ -36,7 +36,7 @@ def CD_curve (ref, data=None, datathr=None, plot=0):
     V_ias = data['IAS'].iloc[1:].to_numpy(dtype=float)  # Putting V_IAS values from the dataframe column to np array
     Tm = data['TAT'].iloc[1:].to_numpy(dtype=float)  # Putting TAT values from the dataframe column to np array
 
-    V_e, T, M = reduce(hp, V_ias, Tm)
+    V_e, T, M, Re = reduce(hp, V_ias, Tm)
 
     thrust = f.read().split()
     thrust = np.array(thrust, dtype=float)
