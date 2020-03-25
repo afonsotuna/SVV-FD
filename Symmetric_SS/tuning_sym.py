@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 from scipy.optimize import minimize
 import numpy as np
-from Symmetric_SS.main_symmetric_ref import num_model_sym_reference
+from Symmetric_SS.main_symmetric import num_model_sym_data
 
 
 def error_def(y1, y2):
@@ -19,7 +19,7 @@ def error_def(y1, y2):
     return error_std
 
 
-def error_function_sym(parameters, block_fuel=4050, passenger_weight=695, c=2.0569):
+def error_function_sym(parameters, block_fuel=2700, passenger_weight=771, c=2.0569):
     error_tot = 0
     C_x_q = parameters[0]
     C_z_q = parameters[1]
@@ -28,25 +28,23 @@ def error_function_sym(parameters, block_fuel=4050, passenger_weight=695, c=2.05
     C_m_q = parameters[4]
 
     # Phugoid
-    for i in range(2):
-        output = i + 2
-        y1_PG, y2_PG, _, _, _, _, _ = num_model_sym_reference(output=output, t_lookup=3229, t_limit=200,
-                                                              block_fuel=block_fuel,
-                                                              passenger_weight=passenger_weight, c=c,
-                                                              C_x_q=C_x_q, C_z_q=C_z_q,
-                                                              C_m_alpha=C_m_alpha,
-                                                              C_m_delta_e=C_m_delta_e, C_m_q=C_m_q)
+    for output in range(4):
+        y1_PG, y2_PG, _, _, _, _, _ = num_model_sym_data(output=output, t_lookup=3219, t_limit=170,
+                                                         block_fuel=block_fuel,
+                                                         passenger_weight=passenger_weight, c=c,
+                                                         C_x_q=C_x_q, C_z_q=C_z_q,
+                                                         C_m_alpha=C_m_alpha,
+                                                         C_m_delta_e=C_m_delta_e, C_m_q=C_m_q)
         error_tot += error_def(y1_PG, y2_PG)
 
-        # Short Period
-        for i in range(2):
-            output = i + 2
-        y1_SP, y2_SP, _, _, _, _, _ = num_model_sym_reference(output=output, t_lookup=3630, t_limit=40,
-                                                              block_fuel=block_fuel,
-                                                              passenger_weight=passenger_weight, c=c,
-                                                              C_x_q=C_x_q, C_z_q=C_z_q,
-                                                              C_m_alpha=C_m_alpha,
-                                                              C_m_delta_e=C_m_delta_e, C_m_q=C_m_q)
+    # Short Period
+    for output in range(4):
+        y1_SP, y2_SP, _, _, _, _, _ = num_model_sym_data(output=output, t_lookup=3124.6, t_limit=3.5,
+                                                         block_fuel=block_fuel,
+                                                         passenger_weight=passenger_weight, c=c,
+                                                         C_x_q=C_x_q, C_z_q=C_z_q,
+                                                         C_m_alpha=C_m_alpha,
+                                                         C_m_delta_e=C_m_delta_e, C_m_q=C_m_q)
         error_tot += error_def(y1_SP, y2_SP)
 
     return error_tot
@@ -59,6 +57,6 @@ def error_minimize_sym(x_bounds):
     return C_x_q, C_z_q, C_m_alpha, C_m_delta_e, C_m_q
 
 
-x_bounds = [[-5, 0], [-20, 0], [-5, 0], [-5, 0], [-20, 0]]
+x_bounds = [[-20, 0], [-20, 0], [-5, 0], [-5, 0], [-20, 0]]
 
 print(error_minimize_sym(x_bounds))

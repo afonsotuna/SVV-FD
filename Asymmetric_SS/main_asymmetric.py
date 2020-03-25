@@ -76,9 +76,6 @@ def num_model_asym_data(output=1, t_lookup=3717, t_limit=14, eigenmotion="dutch 
                                               flight_data['Ahrs1_bRollRate'][0][0][0][index][0] * m.pi / 180,
                                               flight_data['Ahrs1_bYawRate'][0][0][0][index][0] * m.pi / 180])
 
-    if eigenmotion == "dutch roll":
-        out = out
-
     y2 = out[output, :]  # Outputs: 1 - phi / 2 - pb/2V / 3 - rb/2V
 
     # flight data, model response, time vectors and input vectors
@@ -138,12 +135,12 @@ def make_plot_asym(output=1, eigenmotion="dutch roll", t_lookup=3717, t_limit=14
     return
 
 
-t_rn = 3050
-t_lim = 20
-motion = "aperiodic"
+t_rn = 3590
+t_lim = 120
+motion = "spiral"
 
-CY_b, Cn_r, Cn_p, Cl_r, Cl_p = -0.7500, -0.2061, -0.0602, 0.2376, -0.7108
-# CY_b, Cn_r, Cn_p, Cl_r, Cl_p = -2.560698700667486, 0.0, 0.0, 0.09170271668625395, -0.7930823749878441
+#CY_b, Cn_r, Cn_p, Cl_r, Cl_p = -0.7500, -0.2061, -0.0602, 0.2376, -0.7108
+CY_b, Cn_r, Cn_p, Cl_r, Cl_p = -2.3990087607305197, -0.0440493484743326, -0.00228230929244073, 0.13506228812436086, -1.3647331248494425
 
 make_plot_asym(output=1, eigenmotion=motion, t_lookup=t_rn, t_limit=t_lim, CY_b=CY_b, Cn_r=Cn_r, Cn_p=Cn_p, Cl_r=Cl_r,
                Cl_p=Cl_p)

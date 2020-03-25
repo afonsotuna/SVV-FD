@@ -82,7 +82,6 @@ def num_model_sym_data(output=1, t_lookup=3717, t_limit=14, block_fuel=2700, pas
     y2 = out[output, :]
 
     if output == 3:
-        # y1 *= flight_data['Dadc1_tas'][0][0][0][index]*0.514444 / c
         y2 *= flight_data['Dadc1_tas'][0][0][0][index] * 0.514444 / c
 
     return y1, y2, t1, t2, input_delta_e, t_lookup, t_interval
@@ -139,19 +138,19 @@ def make_plot_sym_data(output=1, t_lookup=3717, t_limit=14, block_fuel=2700, pas
         plt.show()
 
         # elif output == 4:
-        plt.plot(t2, input_delta_e, label='Elevator input')
-        plt.legend()
-        plt.xlabel('Elevator input between ' + str(t_lookup) + ' [s] and ' + str(t_interval) + ' [s].')
-        plt.ylabel('Deflection [rad]')
-        plt.show()
+        # plt.plot(t2, input_delta_e, label='Elevator input')
+        # plt.legend()
+        # plt.xlabel('Elevator input between ' + str(t_lookup) + ' [s] and ' + str(t_interval) + ' [s].')
+        # plt.ylabel('Deflection [rad]')
+        # plt.show()
 
     return
 
 
 t_rn = 3124.6
 t_lim = 3.5
-C_x_q, C_z_q, C_m_alpha, C_m_delta_e, C_m_q = -0.2817, -5.6629, -0.7249, -1.4968, -8.7941
-# C_x_q, C_z_q, C_m_alpha, C_m_delta_e,C_m_q = -13.193219977520021, -7.130847541981485, -0.21272996346475043, -0.6919484170523861,-11.722501242413275
+#C_x_q, C_z_q, C_m_alpha, C_m_delta_e, C_m_q = -0.2817, -5.6629, -0.7249, -1.4968, -8.7941
+C_x_q, C_z_q, C_m_alpha, C_m_delta_e,C_m_q = -12.820571250633355, 0.0, -0.44894128027919294, -1.107547670556683, -8.614766207704937
 
 make_plot_sym_data(output=0, t_lookup=t_rn, t_limit=t_lim, C_x_q=C_x_q, C_z_q=C_z_q, C_m_alpha=C_m_alpha,
                    C_m_delta_e=C_m_delta_e, C_m_q=C_m_q)
@@ -159,7 +158,7 @@ make_plot_sym_data(output=1, t_lookup=t_rn, t_limit=t_lim, C_x_q=C_x_q, C_z_q=C_
                    C_m_delta_e=C_m_delta_e, C_m_q=C_m_q)
 make_plot_sym_data(output=2, t_lookup=t_rn, t_limit=t_lim, C_x_q=C_x_q, C_z_q=C_z_q, C_m_alpha=C_m_alpha,
                    C_m_delta_e=C_m_delta_e, C_m_q=C_m_q)
-# make_plot_sym_data(output=3, t_lookup=t_rn, t_limit=t_lim, C_x_q=C_x_q, C_z_q=C_z_q, C_m_alpha=C_m_alpha, C_m_delta_e=C_m_delta_e, C_m_q=C_m_q)
+make_plot_sym_data(output=3, t_lookup=t_rn, t_limit=t_lim, C_x_q=C_x_q, C_z_q=C_z_q, C_m_alpha=C_m_alpha, C_m_delta_e=C_m_delta_e, C_m_q=C_m_q)
 
 t_rn = 3219
 t_lim = 170
@@ -169,4 +168,4 @@ make_plot_sym_data(output=1, t_lookup=t_rn, t_limit=t_lim, C_x_q=C_x_q, C_z_q=C_
                    C_m_delta_e=C_m_delta_e, C_m_q=C_m_q)
 make_plot_sym_data(output=2, t_lookup=t_rn, t_limit=t_lim, C_x_q=C_x_q, C_z_q=C_z_q, C_m_alpha=C_m_alpha,
                    C_m_delta_e=C_m_delta_e, C_m_q=C_m_q)
-# make_plot_sym_data(output=3, t_lookup=t_rn, t_limit=t_lim, C_x_q=C_x_q, C_z_q=C_z_q, C_m_alpha=C_m_alpha, C_m_delta_e=C_m_delta_e, C_m_q=C_m_q)
+make_plot_sym_data(output=3, t_lookup=t_rn, t_limit=t_lim, C_x_q=C_x_q, C_z_q=C_z_q, C_m_alpha=C_m_alpha, C_m_delta_e=C_m_delta_e, C_m_q=C_m_q)
