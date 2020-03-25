@@ -31,28 +31,34 @@ def error_function_asym(parameters, block_fuel=2700, passenger_weight=771):
     for i in range(3):
         output = i + 1
         y1_DR, y2_DR, _, _, _, _, _, _ = num_model_asym_data(output=output, t_lookup=3445, t_limit=15,
-                                                                  eigenmotion="dutch roll", block_fuel=block_fuel,
-                                                                  passenger_weight=passenger_weight, CY_b=CY_b,
-                                                                  Cn_r=Cn_r, Cn_p=Cn_p, Cl_r=Cl_r, Cl_p=Cl_p)
-        error_tot += error_def(y1_DR, y2_DR)
+                                                             eigenmotion="dutch roll", block_fuel=block_fuel,
+                                                             passenger_weight=passenger_weight, CY_b=CY_b,
+                                                             Cn_r=Cn_r, Cn_p=Cn_p, Cl_r=Cl_r, Cl_p=Cl_p)
+        errorDR = error_def(y1_DR, y2_DR)
+        print("Dutch roll error: ", errorDR)
+        error_tot += errorDR
 
     # Aperiodic Roll
     for i in range(3):
         output = i + 1
         y1_AR, y2_AR, _, _, _, _, _, _ = num_model_asym_data(output=output, t_lookup=3050, t_limit=15,
-                                                                  eigenmotion="aperiodic", block_fuel=block_fuel,
-                                                                  passenger_weight=passenger_weight, CY_b=CY_b,
-                                                                  Cn_r=Cn_r, Cn_p=Cn_p, Cl_r=Cl_r, Cl_p=Cl_p)
-        error_tot += error_def(y1_AR, y2_AR)
+                                                             eigenmotion="aperiodic", block_fuel=block_fuel,
+                                                             passenger_weight=passenger_weight, CY_b=CY_b,
+                                                             Cn_r=Cn_r, Cn_p=Cn_p, Cl_r=Cl_r, Cl_p=Cl_p)
+        errorAR = error_def(y1_AR, y2_AR)
+        print("Aperiodic roll error: ", errorAR)
+        error_tot += errorAR
 
     # Spiral
     for i in range(3):
         output = i + 1
         y1_SP, y2_SP, _, _, _, _, _, _ = num_model_asym_data(output=output, t_lookup=3590, t_limit=120,
-                                                                  eigenmotion="spiral", block_fuel=block_fuel,
-                                                                  passenger_weight=passenger_weight, CY_b=CY_b,
-                                                                  Cn_r=Cn_r, Cn_p=Cn_p, Cl_r=Cl_r, Cl_p=Cl_p)
-        error_tot += error_def(y1_SP, y2_SP)
+                                                             eigenmotion="spiral", block_fuel=block_fuel,
+                                                             passenger_weight=passenger_weight, CY_b=CY_b,
+                                                             Cn_r=Cn_r, Cn_p=Cn_p, Cl_r=Cl_r, Cl_p=Cl_p)
+        errorSP = error_def(y1_SP, y2_SP)
+        print("Spiral error: ", errorSP)
+        error_tot += errorSP
 
     return error_tot
 
@@ -67,3 +73,6 @@ def error_minimize_asym(x_bounds):
 x_bounds = [[-5, 0], [-5, 0], [-5, 0], [0, 5], [-5, 0]]
 
 print(error_minimize_asym(x_bounds))
+
+# pars= np.array(([-2.3990087607305197], [-0.0440493484743326], [-0.00228230929244073], [0.13506228812436086], [-1.3647331248494425]))
+# error_function_asym(pars)
