@@ -98,33 +98,36 @@ def make_plot_asym(output=1, eigenmotion="dutch roll", t_lookup=3717, t_limit=14
                                                                                              Cl_r=Cl_r, Cl_p=Cl_p)
 
     if output == 1:
-        plt.plot(t1, y1, label=r'Reference data - $\phi$')
+        plt.plot(t1, y1, label=r'Flight data - $\phi$')
         plt.plot(t2, y2, label=r'System response - $\phi$')
         plt.legend()
         plt.xlabel('Time [s]')
         plt.ylabel('Roll angle [rad]')
         plt.title(
-            'Reference data vs system response between ' + str(t_lookup) + ' [s] and ' + str(t_interval) + ' [s].')
+            'Flight data vs system response between ' + str(t_lookup) + ' [s] and ' + str(t_interval) + ' [s].')
+        plt.savefig('Aperiodic_Roll/phi_aperiodic_data.png')
         plt.show()
 
     elif output == 2:
-        plt.plot(t1, y1, label=r'Reference data - $p$')
+        plt.plot(t1, y1, label=r'Flight data - $p$')
         plt.plot(t2, y2, label=r'System response - $p$')
         plt.legend()
         plt.xlabel('Time [s]')
         plt.ylabel('Roll rate [rad/s]')
         plt.title(
-            'Reference data vs system response between ' + str(t_lookup) + ' [s] and ' + str(t_interval) + ' [s].')
+            'Flight data vs system response between ' + str(t_lookup) + ' [s] and ' + str(t_interval) + ' [s].')
+        plt.savefig('Aperiodic_Roll/p_aperiodic_data.png')
         plt.show()
 
     elif output == 3:
-        plt.plot(t1, y1, label=r'Reference data - $r$')
+        plt.plot(t1, y1, label=r'Flight data - $r$')
         plt.plot(t2, y2, label=r'System response - $r$')
         plt.legend()
         plt.xlabel('Time [s]')
         plt.ylabel('Yaw rate [rad/s]')
         plt.title(
-            'Reference data vs system response between ' + str(t_lookup) + ' [s] and ' + str(t_interval) + ' [s].')
+            'Flight data vs system response between ' + str(t_lookup) + ' [s] and ' + str(t_interval) + ' [s].')
+        plt.savefig('Aperiodic_Roll/r_aperiodic_data.png')
         plt.show()
 
     elif output == 4:
@@ -137,17 +140,16 @@ def make_plot_asym(output=1, eigenmotion="dutch roll", t_lookup=3717, t_limit=14
 
     return
 
-
-t_rn = 3050
-t_lim = 20
-motion = "aperiodic"
-
-CY_b, Cn_r, Cn_p, Cl_r, Cl_p = -0.7500, -0.2061, -0.0602, 0.2376, -0.7108
-# CY_b, Cn_r, Cn_p, Cl_r, Cl_p = -2.560698700667486, 0.0, 0.0, 0.09170271668625395, -0.7930823749878441
-
-make_plot_asym(output=1, eigenmotion=motion, t_lookup=t_rn, t_limit=t_lim, CY_b=CY_b, Cn_r=Cn_r, Cn_p=Cn_p, Cl_r=Cl_r,
-               Cl_p=Cl_p)
-make_plot_asym(output=2, eigenmotion=motion, t_lookup=t_rn, t_limit=t_lim, CY_b=CY_b, Cn_r=Cn_r, Cn_p=Cn_p, Cl_r=Cl_r,
-               Cl_p=Cl_p)
-make_plot_asym(output=3, eigenmotion=motion, t_lookup=t_rn, t_limit=t_lim, CY_b=CY_b, Cn_r=Cn_r, Cn_p=Cn_p, Cl_r=Cl_r,
-               Cl_p=Cl_p)
+# t_rn = 3050
+# t_lim = 20
+# motion = "aperiodic"
+# #
+# # CY_b, Cn_r, Cn_p, Cl_r, Cl_p = -0.7500, -0.2061, -0.0602, 0.2376, -0.7108
+# CY_b, Cn_r, Cn_p, Cl_r, Cl_p = -2.662089857595346, 0.0, 0.0, 0.07580034708397379, -0.7020261870931681
+#
+# make_plot_asym(output=1, eigenmotion=motion, t_lookup=t_rn, t_limit=t_lim, CY_b=CY_b, Cn_r=Cn_r, Cn_p=Cn_p, Cl_r=Cl_r,
+#                Cl_p=Cl_p)
+# make_plot_asym(output=2, eigenmotion=motion, t_lookup=t_rn, t_limit=t_lim, CY_b=CY_b, Cn_r=Cn_r, Cn_p=Cn_p, Cl_r=Cl_r,
+#                Cl_p=Cl_p)
+# make_plot_asym(output=3, eigenmotion=motion, t_lookup=t_rn, t_limit=t_lim, CY_b=CY_b, Cn_r=Cn_r, Cn_p=Cn_p, Cl_r=Cl_r,
+#                Cl_p=Cl_p)

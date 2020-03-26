@@ -37,6 +37,14 @@ def ss_sym(rho=1.225, theta_0=0, m=4157.174, v=80, C_x_q = -0.2817, C_z_q = -5.6
     C_m_q = C_m_q
     C_m_delta_e = C_m_delta_e  # UPDATED, previous was -1.1642
 
+    #VERIFICATION UPDATES
+    C_z_0 = 0
+    C_x_0 = 0
+    C_z_q = -2*u_c
+    C_m_u = (-C_z_u*C_m_alphad)/(2*u_c - C_z_alphad)
+    C_m_alpha = (-C_z_alpha*C_m_alphad)/(2*u_c - C_z_alphad)
+
+
     # MATRICES
     P = c / v * np.array(
         [[-2 * u_c, 0, 0, 0],

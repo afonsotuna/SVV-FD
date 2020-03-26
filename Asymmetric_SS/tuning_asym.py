@@ -30,23 +30,23 @@ def error_function_asym(parameters, block_fuel=2700, passenger_weight=771):
     # Dutch Roll
     for i in range(3):
         output = i + 1
-        y1_DR, y2_DR, _, _, _, _, _, _ = num_model_asym_data(output=output, t_lookup=3445, t_limit=15,
+        y1_DR, y2_DR, _, _, _, _, _, _ = num_model_asym_data(output=output, t_lookup=3455, t_limit=15,
                                                              eigenmotion="dutch roll", block_fuel=block_fuel,
                                                              passenger_weight=passenger_weight, CY_b=CY_b,
                                                              Cn_r=Cn_r, Cn_p=Cn_p, Cl_r=Cl_r, Cl_p=Cl_p)
         errorDR = error_def(y1_DR, y2_DR)
-        print("Dutch roll error: ", errorDR)
+        # print("Dutch roll error: ", errorDR)
         error_tot += errorDR
 
     # Aperiodic Roll
     for i in range(3):
         output = i + 1
-        y1_AR, y2_AR, _, _, _, _, _, _ = num_model_asym_data(output=output, t_lookup=3050, t_limit=15,
+        y1_AR, y2_AR, _, _, _, _, _, _ = num_model_asym_data(output=output, t_lookup=3050, t_limit=20,
                                                              eigenmotion="aperiodic", block_fuel=block_fuel,
                                                              passenger_weight=passenger_weight, CY_b=CY_b,
                                                              Cn_r=Cn_r, Cn_p=Cn_p, Cl_r=Cl_r, Cl_p=Cl_p)
         errorAR = error_def(y1_AR, y2_AR)
-        print("Aperiodic roll error: ", errorAR)
+        # print("Aperiodic roll error: ", errorAR)
         error_tot += errorAR
 
     # Spiral
@@ -57,7 +57,7 @@ def error_function_asym(parameters, block_fuel=2700, passenger_weight=771):
                                                              passenger_weight=passenger_weight, CY_b=CY_b,
                                                              Cn_r=Cn_r, Cn_p=Cn_p, Cl_r=Cl_r, Cl_p=Cl_p)
         errorSP = error_def(y1_SP, y2_SP)
-        print("Spiral error: ", errorSP)
+        # print("Spiral error: ", errorSP)
         error_tot += errorSP
 
     return error_tot
@@ -72,7 +72,8 @@ def error_minimize_asym(x_bounds):
 
 x_bounds = [[-5, 0], [-5, 0], [-5, 0], [0, 5], [-5, 0]]
 
-print(error_minimize_asym(x_bounds))
+# print(error_minimize_asym(x_bounds))
 
-# pars= np.array(([-2.3990087607305197], [-0.0440493484743326], [-0.00228230929244073], [0.13506228812436086], [-1.3647331248494425]))
+# pars= np.array(([-2.662089857595346], [0.0], [0.0], [0.07580034708397379], [-0.7020261870931681]))
+# pars = np.array(([-0.7500], [-0.2061], [-0.0602], [0.2376], [-0.7108]))
 # error_function_asym(pars)

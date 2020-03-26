@@ -103,8 +103,8 @@ def make_plot_sym_data(output=1, t_lookup=3717, t_limit=14, block_fuel=2700, pas
         plt.legend()
         plt.xlabel('Time [s]')
         plt.ylabel('Velocity [m/s]')
-        plt.title(
-            'Reference data vs system response between ' + str(t_lookup) + ' [s] and ' + str(t_interval) + ' [s].')
+        #plt.title(
+        #    'Reference data vs system response between ' + str(t_lookup) + ' [s] and ' + str(t_interval) + ' [s].')
         plt.show()
 
     if output == 1:
@@ -113,8 +113,8 @@ def make_plot_sym_data(output=1, t_lookup=3717, t_limit=14, block_fuel=2700, pas
         plt.legend()
         plt.xlabel('Time [s]')
         plt.ylabel('Angle of attack [rad]')
-        plt.title(
-            'Reference data vs system response between ' + str(t_lookup) + ' [s] and ' + str(t_interval) + ' [s].')
+        #plt.title(
+        #    'Reference data vs system response between ' + str(t_lookup) + ' [s] and ' + str(t_interval) + ' [s].')
         plt.show()
 
     elif output == 2:
@@ -123,8 +123,8 @@ def make_plot_sym_data(output=1, t_lookup=3717, t_limit=14, block_fuel=2700, pas
         plt.legend()
         plt.xlabel('Time [s]')
         plt.ylabel('Pitch angle [rad]')
-        plt.title(
-            'Reference data vs system response between ' + str(t_lookup) + ' [s] and ' + str(t_interval) + ' [s].')
+        #plt.title(
+        #    'Reference data vs system response between ' + str(t_lookup) + ' [s] and ' + str(t_interval) + ' [s].')
         plt.show()
 
     elif output == 3:
@@ -133,8 +133,8 @@ def make_plot_sym_data(output=1, t_lookup=3717, t_limit=14, block_fuel=2700, pas
         plt.legend()
         plt.xlabel('Time [s]')
         plt.ylabel('Pitch rate [rad/s]')
-        plt.title(
-            'Reference data vs system response between ' + str(t_lookup) + ' [s] and ' + str(t_interval) + ' [s].')
+        #plt.title(
+        #    'Reference data vs system response between ' + str(t_lookup) + ' [s] and ' + str(t_interval) + ' [s].')
         plt.show()
 
         # elif output == 4:

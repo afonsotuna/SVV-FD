@@ -36,7 +36,7 @@ def error_function_sym(parameters, block_fuel=2700, passenger_weight=771, c=2.05
                                                          C_m_alpha=C_m_alpha,
                                                          C_m_delta_e=C_m_delta_e, C_m_q=C_m_q)
         errorPG = error_def(y1_PG, y2_PG)
-        print("Phugoid error: ", errorPG)
+        # print("Phugoid error: ", errorPG)
         error_tot += errorPG
 
     # Short Period
@@ -48,7 +48,7 @@ def error_function_sym(parameters, block_fuel=2700, passenger_weight=771, c=2.05
                                                          C_m_alpha=C_m_alpha,
                                                          C_m_delta_e=C_m_delta_e, C_m_q=C_m_q)
         errorSP = error_def(y1_SP, y2_SP)
-        print("Short period error: ", errorSP)
+        # print("Short period error: ", errorSP)
         error_tot += errorSP
 
     return error_tot
@@ -66,4 +66,6 @@ x_bounds = [[-20, 0], [-20, 0], [-5, 0], [-5, 0], [-20, 0]]
 print(error_minimize_sym(x_bounds))
 
 # pars= np.array(([-12.820571250633355], [0.0], [-0.44894128027919294], [-1.107547670556683], [-8.614766207704937]))
+# pars = np.array(([-0.2817], [-5.6629], [-0.7249], [-1.4968], [-8.7941]))
 # error_function_sym(pars)
+
