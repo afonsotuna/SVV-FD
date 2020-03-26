@@ -40,7 +40,7 @@ with open('fuel.txt') as f:
 
 fuel_moment = lambda m: np.interp(m, x, y)
 
-# INITIAL FUEL SPECIFICATION
+# INITIAL FUEL SPECIFICATION [lbs]
 fuel_init = 2700.0
 masses['fuel'] = fuel_init
 moments['fuel'] = fuel_moment(fuel_init)
@@ -84,7 +84,23 @@ def cg(t):
         assert fuel >= 0, 'Block fuel depleted at given time.'
         masses['fuel'] = fuel
         moments['fuel'] = fuel_moment(fuel)
-    if 47 * 60 <= t < 49 * 60:
+    if 47 * 60 + 11 <= t < 49 * 60 + 9:
         moments['seat8'] = 86 * 131 / lbs_to_kg / 100
     cg = sum(moments.values()) * 100 / sum(masses.values())
-    return f'{round((cg - xlemac) / mac * 100, 3)} % MAC'
+    return sum(moments.values()) * 100 / sum(masses.values())
+    #return f'{round((cg - xlemac) / mac * 100, 3)} % MAC'
+
+
+# y1 = [cg(timeslot) for timeslot in time]
+# y2 = [276.10 for timeslot in time]
+# y3 = [285.80 for timeslot in time]
+# x = time/60
+
+
+# plt.plot(x, y1, color = 'blue')
+# plt.plot(x, y2, color = 'black', linestyle = 'dashed')
+# plt.plot(x, y3, color = 'black', linestyle = 'dashed')
+# plt.xlabel('Time [min]')
+# plt.ylabel('C.G. [in]')
+# plt.show()
+
