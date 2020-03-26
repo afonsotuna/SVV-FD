@@ -3,7 +3,7 @@ import numpy as np
 import control
 
 
-def ss_asym(rho=1.225, theta_0=0, m=4157.174, v=80, Kzz=(0.042) ** 0.5, Cn_r=-0.2061, CY_b=-0.7500):
+def ss_asym(rho=1.225, theta_0=0, m=4157.174, v=80, CY_b=-0.7500, Cn_r=-0.2061, Cn_p=-0.0602, Cl_r=0.2376, Cl_p=-0.7108):
     # dimensions
     W = m * 9.81
     S = 30  # m^2
@@ -15,7 +15,7 @@ def ss_asym(rho=1.225, theta_0=0, m=4157.174, v=80, Kzz=(0.042) ** 0.5, Cn_r=-0.
 
     # inertia
     K_xx = (0.019) ** 0.5
-    K_zz = Kzz
+    K_zz = (0.042) ** 0.5
     K_xz = 0.002
 
     # LATERAL FORCE DERIVATIVES
@@ -28,15 +28,15 @@ def ss_asym(rho=1.225, theta_0=0, m=4157.174, v=80, Kzz=(0.042) ** 0.5, Cn_r=-0.
 
     # ROLL MOMENT DERIVATIVES
     Cl_b = -0.1026
-    Cl_p = -0.7108  # bd stands for derivative of beta
-    Cl_r = 0.2376
+    Cl_p = Cl_p  # bd stands for derivative of beta
+    Cl_r = Cl_r
     Cl_sa = -0.2309  # derivative to aileron deflection
     Cl_sr = 0.0344  # derivative to rudder deflection
 
     # YAW MOMENT DERIVATIVES
     Cn_b = 0.1348
     Cn_b_d = 0  # bd stands for derivative of beta
-    Cn_p = -0.0602
+    Cn_p = Cn_p
     Cn_r = Cn_r
     Cn_sa = -0.0120  # derivative to aileron deflection
     Cn_sr = -0.0939  # derivative to rudder deflection
@@ -44,7 +44,7 @@ def ss_asym(rho=1.225, theta_0=0, m=4157.174, v=80, Kzz=(0.042) ** 0.5, Cn_r=-0.
     # other parameters only required in asym  matrix
     C_L = (W * np.cos(theta_0)) / (0.5 * rho * v ** 2 * S)  # component of weight along the Zs axis
 
-    # BUILDING MATRIXES
+    # BUILDING MATRICES
 
     P = np.zeros((4, 4))
     P[0, 0] = (CY_b_d - 2 * u_b) * b / v

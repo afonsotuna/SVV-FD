@@ -2,7 +2,7 @@ import pandas as Pd
 import numpy as np
 import matplotlib.pyplot as plt
 import xlrd
-from scipy import stats
+from scipy import stats, optimize
 from Reduction_function import reduce
 
 rho0 = 1.2250
@@ -13,8 +13,9 @@ BEM = 9165    # Basic empty mass, taken from mass report for 2020 [lbs]
 c = 2.0569    # MAC, taken from cit_par.py [m]
 d = 0.686     # diameter of engine [m], from online source
 W_s = 60500   # standard weight [N]
+Cm0 = 0.0297
 
-ref = 1
+ref = 0
 # reading data unto pandas dataframe:
 if ref == 1:
     exc_data = 'Post_Flight_Datasheet_Flight_1_DD_12_3_2018.xlsx'
@@ -35,7 +36,7 @@ V_ias = data['IAS'].iloc[1:].to_numpy(dtype=float)    # Putting V_IAS values fro
 Tm = data['TAT'].iloc[1:].to_numpy(dtype=float)     # Putting TAT values from the dataframe column to np array
 delta_e = data['de'].iloc[1:].to_numpy(dtype=float)
 
-V_e, T, M = reduce(hp, V_ias, Tm)
+V_e, T, M, Re = reduce(hp, V_ias, Tm)
 F_used = data['F. used'].iloc[1:].to_numpy(dtype=float)  # Same as what's done above but for fuel used
 
 pax_masses = np.array(Pd.read_excel(exc_data, header=None, usecols='H', skiprows=7, nrows=9))
@@ -61,8 +62,13 @@ hp2 = data2['hp'].iloc[1:].to_numpy(dtype=float)  # Putting pressure alt (hp) va
 V_ias2 = data2['IAS'].iloc[1:].to_numpy(dtype=float)    # Putting V_IAS values from the dataframe column to np array
 Tm2 = data2['TAT'].iloc[1:].to_numpy(dtype=float)     # Putting TAT values from the dataframe column to np array
 
-V_e2, T2, M2 = reduce(hp2, V_ias2, Tm2)
+V_e2, T2, M2, Re_range = reduce(hp2, V_ias2, Tm2)
 F_used = data2['F. used'].iloc[1:].to_numpy(dtype=float)  # Same as what's done above but for fuel used
+
+
+print("Re range is from " + np.format_float_scientific(float(Re_range[0])) + ' to ' + np.format_float_scientific(
+    float(Re_range[1])))
+print('Mach range is from ' + str(round(min(M2), 2)) + ' to ' + str(round(max(M2), 2)))
 
 pax_masses = np.array(Pd.read_excel(exc_data, header=None, usecols='H', skiprows=7, nrows=9))
 init_fuel = xlrd.open_workbook(exc_data).sheet_by_index(0).cell_value(17, 3)
@@ -87,12 +93,12 @@ C_m_alpha = -C_m_deltae_rad * gradient
 print('C_m_alpha in radians is', C_m_alpha)
 
 
-f = open('thr_trim_ours.dat', 'r')
+f = open('thrust_dats/thr_trim_ours.dat', 'r')
 thrust = f.read().split()
 thrust = np.array(thrust, dtype=float)
 f.close()
 
-f = open('thr_trim_ours_std.dat', 'r')
+f = open('thrust_dats/thr_trim_ours_std.dat', 'r')
 thrust_std = f.read().split()
 thrust_std = np.array(thrust_std, dtype=float)
 f.close()
@@ -107,6 +113,19 @@ delta_e_red = defl - (C_m_T_c/C_m_deltae) * (thr_coeff_std - thr_coeff)
 print(delta_e_red)
 print(V_e_red2)
 
-plt.scatter(V_e_red2, delta_e_red, marker='x')
-#plt.plot(x1, y1,'-g')
+def inv_f (x, a, b):
+    return (a + (b/x ** 2))
+
+popt, pcov = optimize.curve_fit(inv_f, V_e_red2, delta_e_red)
+xlab = ('Reduced velocity (\u1E7C$_e$) [m/s]')
+ylab = ('Reduced elevator deflection ($\delta_{e_{eq}}^*$) [deg]')
+plt.axes(xlim=(60, 180), ylim=(3, -3), xlabel=xlab, ylabel=ylab)
+plt.xticks(np.arange(40, 190, step=20))
+x1 = np.linspace(1, 250, 250)
+plt.plot(x1, inv_f(x1, *popt), 'darkturquoise', label='Inverse square least-squares fit')
+plt.scatter(V_e_red2, delta_e_red, s=70, c='red', marker='x', label='Reduced elevator deflection data')
+#plt.plot(x1, popt[0] * np.ones(250))
+plt.grid()
+plt.legend(loc='best')
+plt.savefig('figs/Reduced_Trim_curve')
 plt.show()

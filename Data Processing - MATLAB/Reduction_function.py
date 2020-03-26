@@ -13,6 +13,8 @@ g      = 9.81            # [m/sec^2] (gravity constant)
 p0 = 101325              # Pressure at sea level in ISA [Pa]
 gamm = 1.4               # Ratio of specific heats [-]
 S      = 30.00	         # wing area [m^2]
+c = 2.0569    # MAC, taken from cit_par.py [m]
+mu_0 = 1.7894 * 10 ** -5 # viscosity at ISA sea-level, [kg/(m*s)]
 W_s = 60500
 
 # Function that takes in values of pressure altitude, indicated airspeed, and TAT,
@@ -35,4 +37,8 @@ def reduce (hp, V_ias, Tm):
     V_tru = M*a                                         # Calculating true airspeed
     V_e = V_tru * np.sqrt( (p/(R*T))/rho0 )             # Calculating equivalent airspeed
 
-    return (V_e, T, M)
+    mu = mu_0 * ((T / Temp0) ** (3 / 2)) * ((Temp0 + 110) / (T + 110))
+    Re = ((p/(R * T)) * V_tru * c) / mu
+    Re_range = [np.format_float_positional(min(Re), 2, fractional=False), np.format_float_positional(max(Re), 3, fractional=False)]
+
+    return (V_e, T, M, Re_range)
